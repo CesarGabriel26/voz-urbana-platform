@@ -53,7 +53,7 @@ export class HomePage {
 
   authItems: NavItem[] = [
     { label: 'Login', link: '/login' },
-    { label: 'Register', link: '/register' },
+    { label: 'Register', link: '/signup' },
   ];
 
   // Grid sizing logic - 2 rows
