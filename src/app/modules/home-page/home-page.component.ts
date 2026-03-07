@@ -1,60 +1,18 @@
 import { Component } from '@angular/core';
-import { Navigation, NavItem } from '../../components/navigation/navigation';
 import { Carousel } from '../../components/carousel/carousel';
 import { CarouselItemDirective } from '../../components/carousel/carousel-item.directive';
 import { Card } from '../../components/card/card';
 import { Pagination } from '../../components/pagination/pagination';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-home-page.component',
-  imports: [Navigation, Carousel, CarouselItemDirective, Card, Pagination],
+  imports: [Carousel, CarouselItemDirective, Card, Pagination],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })
 export class HomePage {
 
-  constructor(
-    private authService: AuthService
-  ) { }
-
-  navItems: NavItem[] = [
-    { label: 'Inicio', link: '/', exact: true },
-    {
-      label: 'Abaixo Assinados',
-      children: [
-        {
-          label: 'Criar Abaixo Assinado',
-          link: '/petition/create',
-          isVisible: () => this.authService.isAuthenticated()
-        },
-        {
-          label: 'Explorar',
-          link: '/petition'
-        },
-      ]
-    },
-    {
-      label: 'Reclamações',
-      children: [
-        {
-          label: 'Minhas Reclamações',
-          link: '/complaint/my',
-          isVisible: () => this.authService.isAuthenticated()
-        },
-        {
-          label: 'Reclamações locais', link: '/complaint'
-
-        },
-      ]
-    },
-    { label: 'Sobre', link: '/about' },
-  ];
-
-  authItems: NavItem[] = [
-    { label: 'Login', link: '/login' },
-    { label: 'Register', link: '/signup' },
-  ];
+  
 
   // Grid sizing logic - 2 rows
   // Assuming 4 columns on desktop, 2 rows = 8 items
