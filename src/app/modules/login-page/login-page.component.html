@@ -6,11 +6,11 @@
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-      <app-form-input label="CPF" type="text" placeholder="000.000.000-00" formControlName="cpf"
-        [control]="$any(loginForm.get('cpf'))" icon="person"></app-form-input>
+      <m-form-input label="CPF" type="text" placeholder="000.000.000-00" formControlName="cpf"
+        [control]="$any(loginForm.get('cpf'))" icon="person"></m-form-input>
 
-      <app-form-input label="Senha" type="password" placeholder="Sua senha" formControlName="password"
-        [control]="$any(loginForm.get('password'))" icon="lock"></app-form-input>
+      <m-form-input label="Senha" type="password" placeholder="Sua senha" formControlName="password"
+        [control]="$any(loginForm.get('password'))" icon="lock"></m-form-input>
 
       <div class="form-actions">
         <a href="#" class="forgot-password">Esqueci minha senha</a>

@@ -1,4 +1,4 @@
-<div class="form-select-container" [class.open]="isOpen" [class.has-value]="value !== null" [class.has-error]="showErrors" [class.disabled]="disabled">
+<div class="form-select-container" [class.open]="isOpen" [class.has-value]="value !== null && value !== ''" [class.has-error]="showErrors" [class.disabled]="disabled">
   <div class="select-wrapper" (click)="toggleDropdown()">
     <span *ngIf="icon && !isOpen" class="material-symbols-outlined icon">{{ icon }}</span>
 

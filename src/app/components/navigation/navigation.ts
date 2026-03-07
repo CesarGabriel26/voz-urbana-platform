@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, signal } from '@angular/core';
+import { Component, ElementRef, HostBinding, HostListener, Input, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 export interface NavItem {
@@ -17,12 +17,16 @@ export interface NavItem {
   styleUrl: './navigation.scss',
 })
 export class Navigation {
-  constructor(private elementRef: ElementRef) {}
+  constructor(private elementRef: ElementRef) { }
 
   @Input() brandName: string = 'VOZ URBANA';
   @Input() brandLogo: string = '';
   @Input() primaryItems: NavItem[] = [];
   @Input() secondaryItems: NavItem[] = [];
+  @Input() position: 'static' | 'sticky' = 'static';
+  @HostBinding('class.sticky') get isSticky() { return this.position === 'sticky'; }
+  @HostBinding('style.display') get display() { return 'block'; }
+  @HostBinding('style.z-index') get zIndex() { return this.position === 'sticky' ? '1000' : 'auto'; }
 
   isMenuOpen = signal(false);
   openDropdown: NavItem | null = null;

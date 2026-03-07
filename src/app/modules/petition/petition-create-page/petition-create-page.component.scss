@@ -1,0 +1,76 @@
+@import '../../complaint/complaint-create-page/complaint-create-page.component.scss';
+
+// Add specific styles for petitions here if needed
+.summary-card {
+  h3 {
+    color: var(--blue-10);
+  }
+}
+
+.map-wrapper {
+  z-index: 1;
+}
+
+.terms-notification {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--gray-2);
+  border-radius: 12px;
+  color: var(--gray-11);
+  font-size: 0.85rem;
+  align-items: center;
+
+  .material-symbols-outlined {
+    color: var(--blue-9);
+    font-size: 1.5rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.regional-selectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.goal-container {
+  .goal-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background: var(--blue-1);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--blue-11);
+
+    .material-symbols-outlined {
+      color: var(--blue-9);
+      font-size: 1.25rem;
+    }
+  }
+}
+
+.legal-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--red-1);
+  color: var(--red-9);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  border: 1px solid var(--red-3);
+}
+
+@media (max-width: 768px) {
+  .regional-selectors {
+    grid-template-columns: 1fr;
+  }
+}

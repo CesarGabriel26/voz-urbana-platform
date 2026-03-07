@@ -1,0 +1,58 @@
+<div class="page-container">
+  <main class="main-content">
+    <section class="list-section">
+      <div class="list-header">
+        <h2>{{ isMyPetitions ? 'Meus Abaixo-Assinados' : 'Abaixo-Assinados Ativos' }}</h2>
+        <span class="count">{{ filteredPetitions.length }} encontrados</span>
+      </div>
+
+      <div class="loading-overlay" *ngIf="isLoading">
+        <span class="material-symbols-outlined rotating">sync</span>
+        Carregando...
+      </div>
+
+      <div class="cards-list">
+        @for (item of filteredPetitions; track item.id) {
+        <m-card [id]="'petition-' + item.id" [color]="item.color" (click)="onCardClick(item)" style="cursor: pointer;">
+          <h3 title>{{ item.title }}</h3>
+          <p content>{{ item.description }}</p>
+          <div footer>
+              <div class="progress-container">
+                  <div class="progress-bar">
+                      <div class="progress-fill" [style.width.%]="(item.signaturesCount / item.goal) * 100"></div>
+                  </div>
+                  <span class="progress-text">{{ item.signaturesCount }} de {{ item.goal }} assinaturas</span>
+              </div>
+            <div class="footer-meta">
+                <span class="category">{{ item.category }}</span>
+                <span class="location-text">
+                  <span class="material-symbols-outlined">location_on</span>
+                  {{ item.location.neighborhood }}
+                </span>
+                <a class="more-link" [routerLink]="['/petition', item.id]">ver e apoiar</a>
+            </div>
+          </div>
+        </m-card>
+        } @empty {
+        <div class="no-results" *ngIf="!isLoading">
+          <p>Nenhum abaixo-assinado encontrado para sua busca.</p>
+        </div>
+        }
+      </div>
+    </section>
+
+    <section class="map-section">
+      <div class="search-floating-container">
+        <m-form-input 
+          [formControl]="searchControl" 
+          [control]="searchControl" 
+          placeholder="Buscar petições por título, descrição ou categoria..."
+          icon="search">
+        </m-form-input>
+      </div>
+      <div class="map-wrapper">
+        <m-map [points]="mapPoints" [zoom]="14" (pointClick)="onMapPointClick($event)"></m-map>
+      </div>
+    </section>
+  </main>
+</div>

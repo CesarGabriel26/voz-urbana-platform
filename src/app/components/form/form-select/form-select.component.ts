@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, forwardRef, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef, ElementRef, HostListener, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -15,7 +15,7 @@ export interface SelectOption {
 }
 
 @Component({
-  selector: 'app-form-select',
+  selector: 'm-form-select',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './form-select.component.html',
@@ -34,16 +34,39 @@ export class FormSelectComponent implements ControlValueAccessor {
   @Input() control!: FormControl;
   @Input() placeholder: string = 'Selecione uma opção';
   @Input() icon?: string;
+  @Input() disabled: boolean = false;
+  @Output() valueChange = new EventEmitter<any>();
+  private statusSub: any;
+  private valueSub: any;
 
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   value: any = null;
   isOpen: boolean = false;
   searchTerm: string = '';
-  disabled: boolean = false;
 
   onChange: any = () => { };
   onTouched: any = () => { };
+
+  ngOnInit(): void {
+    if (this.control) {
+      this.value = this.control.value;
+      this.disabled = this.control.disabled;
+
+      this.valueSub = this.control.valueChanges.subscribe(val => {
+        this.value = val;
+      });
+
+      this.statusSub = this.control.statusChanges.subscribe(() => {
+        this.disabled = this.control.disabled;
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.valueSub) this.valueSub.unsubscribe();
+    if (this.statusSub) this.statusSub.unsubscribe();
+  }
 
   constructor(private elementRef: ElementRef) { }
 
@@ -87,7 +110,13 @@ export class FormSelectComponent implements ControlValueAccessor {
   selectOption(option: SelectOption): void {
     this.value = option.value;
     this.onChange(this.value);
+
+    if (this.control) {
+      this.control.setValue(this.value, { emitEvent: true });
+    }
+
     this.close();
+    this.valueChange.emit(this.value);
   }
 
   get selectedLabel(): string {

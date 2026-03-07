@@ -1,0 +1,157 @@
+<div class="page-container">
+  <div class="content-card">
+    <header class="form-header">
+      <h1>Criar Abaixo-Assinado</h1>
+      <p>Inicie uma petição para mobilizar sua comunidade em torno de uma causa.</p>
+    </header>
+
+    <m-steps [steps]="steps" [currentStep]="currentStep"></m-steps>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-content">
+
+      <!-- Step 1: Location -->
+      <div class="step-pane" *ngIf="currentStep === 0" formGroupName="step2">
+        <h2 class="step-title">Área de Abrangência</h2>
+
+        <div class="regional-selectors">
+          <m-form-select label="Estado" [options]="states()" [control]="asFormControl(step2.get('state'))"
+            (valueChange)="onStateChange($event)" placeholder="Selecione o estado" icon="map">
+          </m-form-select>
+
+          <m-form-select label="Cidade" [options]="cities()" [control]="asFormControl(step2.get('city'))"
+            placeholder="Selecione a cidade" icon="location_city">
+          </m-form-select>
+
+          <m-form-input label="Bairro" placeholder="Digite o bairro principal"
+            [control]="asFormControl(step2.get('neighborhood'))" icon="home">
+          </m-form-input>
+        </div>
+
+        <div class="location-controls">
+          <div class="search-box">
+            <m-form-input label="Localizar no Mapa" placeholder="Digite o endereço exato..."
+              [(ngModel)]="addressSearchQuery" [ngModelOptions]="{standalone: true}" (keyup.enter)="searchAddress()"
+              icon="search">
+            </m-form-input>
+            <button type="button" class="btn-search" (click)="searchAddress()" [disabled]="isSearching">
+              <span class="material-symbols-outlined">{{ isSearching ? 'sync' : 'search' }}</span>
+            </button>
+
+            <div class="search-results" *ngIf="searchResults.length > 0">
+              <div class="result-item" *ngFor="let result of searchResults" (click)='selectSearchResult(result)'>
+                <span class="material-symbols-outlined">location_on</span>
+                <span class="result-text">{{ result.display_name }}</span>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn-location" (click)="useCurrentLocation()">
+            <span class="material-symbols-outlined">my_location</span>
+            Minha Região
+          </button>
+        </div>
+
+        <div class="map-wrapper">
+          <m-map [points]="mapPoints" (pointClick)="onMapClick($event)"></m-map>
+        </div>
+
+        <m-form-input label="Endereço Completo Selecionado" [control]="asFormControl(step2.get('address'))" icon="place"
+          [disabled]="true">
+        </m-form-input>
+      </div>
+
+      <!-- Step 2: Basic Information -->
+      <div class="step-pane" *ngIf="currentStep === 1" formGroupName="step1">
+        <h2 class="step-title">Descreva sua causa</h2>
+
+        <div class="inputs-grid">
+          <div class="full-width">
+            <m-form-input label="Título do Abaixo-Assinado" placeholder="Ex: Pela revitalização da Praça da Matriz"
+              [control]="asFormControl(step1.get('title'))" icon="campaign">
+            </m-form-input>
+          </div>
+
+          <m-form-select label="Categoria" [options]="categories" [control]="asFormControl(step1.get('category'))"
+            placeholder="Selecione o tema da petição" icon="category">
+          </m-form-select>
+
+          <m-form-select label="Escopo Legal" [options]="scopeOptions" [control]="asFormControl(step1.get('scope'))"
+            icon="policy">
+          </m-form-select>
+
+          <div class="goal-container full-width">
+            <m-form-input label="Meta de Assinaturas" type="number" placeholder="Ex: 500"
+              [control]="asFormControl(step1.get('goal'))" icon="groups">
+            </m-form-input>
+            <div class="goal-info" *ngIf="step1.get('scope')?.value !== 'neighborhood'">
+              <span class="material-symbols-outlined">info</span>
+              Meta mínima sugerida de <strong>{{ minGoal }}</strong> com base em <strong>{{ totalVoters }}</strong>
+              eleitores.
+            </div>
+          </div>
+
+          <div class="full-width">
+            <m-form-input label="Justificativa e Objetivos"
+              placeholder="Explique detalhadamente por que este projeto é importante..."
+              [control]="asFormControl(step1.get('description'))" type="textarea" icon="description">
+            </m-form-input>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Review & Privacy -->
+      <div class="step-pane" *ngIf="currentStep === 2" formGroupName="step3">
+        <h2 class="step-title">Revisão e Rigor Jurídico</h2>
+
+        <div class="review-grid">
+          <div class="review-section">
+            <label>Visibilidade e Privacidade</label>
+            <m-form-select [options]="visibilityOptions" [control]="asFormControl(step3.get('visibility'))"
+              icon="visibility">
+            </m-form-select>
+          </div>
+
+          <div class="summary-card">
+            <h3>Resumo da Petição</h3>
+            <div class="summary-item">
+              <strong>Escopo:</strong> {{ step1.get('scope')?.value === 'city_law' ? 'Projeto de Lei Popular' :
+              step1.get('scope')?.value === 'city_pressure' ? 'Pressão Municipal' : 'Local (Bairro)' }}
+            </div>
+            <div class="summary-item">
+              <strong>Local:</strong> {{ step2.get('city')?.value ? 'Cidade selecionada' : '' }} - {{
+              step2.get('neighborhood')?.value }}
+            </div>
+            <div class="summary-item">
+              <strong>Meta:</strong> {{ step1.get('goal')?.value }} assinaturas
+            </div>
+            <div class="summary-item" *ngIf="step1.get('scope')?.value === 'city_law'">
+              <span class="legal-badge">Exige Título de Eleitor</span>
+            </div>
+          </div>
+
+          <div class="terms-notification">
+            <span class="material-symbols-outlined">gavel</span>
+            <p>Ao publicar, você confirma a validade jurídica dos dados e a intenção de cumprir os requisitos legais do
+              escopo selecionado.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <footer class="form-footer">
+        <button type="button" class="btn-secondary" (click)="prevStep()" *ngIf="currentStep > 0">
+          Voltar
+        </button>
+        <div class="spacer"></div>
+        <button type="button" class="btn-primary" (click)="nextStep()" *ngIf="currentStep < steps.length - 1">
+          Próximo
+        </button>
+        <button type="submit" class="btn-primary btn-submit" *ngIf="currentStep === steps.length - 1"
+          [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Publicando...' : 'Publicar Abaixo-Assinado' }}
+        </button>
+      </footer>
+
+    </form>
+  </div>
+</div>

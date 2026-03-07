@@ -1,4 +1,4 @@
-<div class="form-input-container" [class.focused]="isFocused" [class.has-value]="value" [class.has-error]="showErrors" [class.disabled]="disabled">
+<div class="form-input-container" [class.focused]="isFocused" [class.has-value]="value !== null && value !== ''" [class.has-error]="showErrors" [class.disabled]="disabled">
   <div class="input-wrapper">
     <span *ngIf="icon" class="material-symbols-outlined icon">{{ icon }}</span>
 

@@ -26,8 +26,13 @@ export class MainLayoutComponent {
           isVisible: () => this.authService.isAuthenticated()
         },
         {
+          label: 'Meus Abaixo Assinados',
+          link: '/petition/my',
+          isVisible: () => this.authService.isAuthenticated()
+        },
+        {
           label: 'Explorar',
-          link: '/petition'
+          link: '/petitions'
         },
       ]
     },
@@ -35,12 +40,17 @@ export class MainLayoutComponent {
       label: 'Reclamações',
       children: [
         {
+          label: 'Criar Reclamação',
+          link: '/complaint/create',
+          isVisible: () => this.authService.isAuthenticated()
+        },
+        {
           label: 'Minhas Reclamações',
           link: '/complaint/my',
           isVisible: () => this.authService.isAuthenticated()
         },
         {
-          label: 'Reclamações locais', link: '/complaint'
+          label: 'Reclamações locais', link: '/complaints'
 
         },
       ]

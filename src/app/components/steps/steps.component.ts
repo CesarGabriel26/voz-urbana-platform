@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-steps',
+  selector: 'm-steps',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './steps.component.html',

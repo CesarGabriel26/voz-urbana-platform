@@ -5,7 +5,7 @@
       <p>Junte-se ao Voz Urbana para melhorar sua cidade</p>
     </div>
 
-    <app-steps [steps]="steps" [currentStep]="currentStep"></app-steps>
+    <m-steps [steps]="steps" [currentStep]="currentStep"></m-steps>
 
     <div class="privacy-notice" *ngIf="currentStep === 0">
       <span class="material-symbols-outlined">info</span>
@@ -15,30 +15,30 @@
     <div class="form-steps-container">
       <!-- Step 1: Identity -->
       <form *ngIf="currentStep === 0" [formGroup]="identityForm" class="signup-form">
-        <app-form-input label="Nome Completo" placeholder="Ex: João da Silva" formControlName="name"
-          [control]="$any(identityForm.get('name'))" icon="person"></app-form-input>
+        <m-form-input label="Nome Completo" placeholder="Ex: João da Silva" formControlName="name"
+          [control]="$any(identityForm.get('name'))" icon="person"></m-form-input>
 
-        <app-form-input label="CPF" placeholder="000.000.000-00" formControlName="cpf"
-          [control]="$any(identityForm.get('cpf'))" icon="badge"></app-form-input>
+        <m-form-input label="CPF" placeholder="000.000.000-00" formControlName="cpf"
+          [control]="$any(identityForm.get('cpf'))" icon="badge"></m-form-input>
 
-        <app-form-input label="Data de Nascimento" type="date" formControlName="birthDate"
-          [control]="$any(identityForm.get('birthDate'))" icon="calendar_today"></app-form-input>
+        <m-form-input label="Data de Nascimento" type="date" formControlName="birthDate"
+          [control]="$any(identityForm.get('birthDate'))" icon="calendar_today"></m-form-input>
       </form>
 
       <!-- Step 2: Contact -->
       <form *ngIf="currentStep === 1" [formGroup]="contactForm" class="signup-form">
-        <app-form-input label="E-mail" type="email" placeholder="seu@email.com" formControlName="email"
-          [control]="$any(contactForm.get('email'))" icon="mail"></app-form-input>
+        <m-form-input label="E-mail" type="email" placeholder="seu@email.com" formControlName="email"
+          [control]="$any(contactForm.get('email'))" icon="mail"></m-form-input>
 
-        <app-form-input label="Telefone (Opcional)" placeholder="11999998888" formControlName="phone"
-          [control]="$any(contactForm.get('phone'))" icon="call"></app-form-input>
+        <m-form-input label="Telefone (Opcional)" placeholder="11999998888" formControlName="phone"
+          [control]="$any(contactForm.get('phone'))" icon="call"></m-form-input>
       </form>
 
       <!-- Step 3: Security -->
       <form *ngIf="currentStep === 2" [formGroup]="securityForm" class="signup-form">
         <div class="password-field-group">
-          <app-form-input label="Senha" type="password" placeholder="Mínimo 8 caracteres, número e símbolo"
-            formControlName="password" [control]="$any(securityForm.get('password'))" icon="lock_open"></app-form-input>
+          <m-form-input label="Senha" type="password" placeholder="Mínimo 8 caracteres, número e símbolo"
+            formControlName="password" [control]="$any(securityForm.get('password'))" icon="lock_open"></m-form-input>
 
           <div class="password-strength-wrapper" *ngIf="securityForm.get('password')?.value">
             <div class="strength-meter">
@@ -49,9 +49,9 @@
           </div>
         </div>
 
-        <app-form-input label="Confirmar Senha" type="password" placeholder="Repita sua senha"
+        <m-form-input label="Confirmar Senha" type="password" placeholder="Repita sua senha"
           formControlName="confirmPassword" [control]="$any(securityForm.get('confirmPassword'))"
-          icon="lock"></app-form-input>
+          icon="lock"></m-form-input>
       </form>
     </div>
 

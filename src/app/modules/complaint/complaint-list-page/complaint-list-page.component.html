@@ -1,0 +1,47 @@
+<div class="page-container">
+  <main class="main-content">
+    <section class="list-section">
+      <div class="list-header">
+        <h2>{{ isMyComplaints ? 'Minhas Reclamações' : 'Reclamações Recentes' }}</h2>
+        <span class="count">{{ filteredComplaints.length }} encontrados</span>
+      </div>
+
+      <div class="loading-overlay" *ngIf="isLoading">
+        <span class="material-symbols-outlined rotating">sync</span>
+        Carregando...
+      </div>
+
+      <div class="cards-list">
+        @for (item of filteredComplaints; track item.id) {
+        <m-card [id]="'complaint-' + item.id" [color]="item.color" (click)="onCardClick(item)" style="cursor: pointer;">
+          <h3 title>{{ item.title }}</h3>
+          <p content>{{ item.description }}</p>
+          <div footer>
+            <span class="category">{{ item.category }}</span>
+            <span class="date">{{ item.date }}</span>
+            <a class="more-link" [routerLink]="['/complaint', item.id]">ver detalhes</a>
+          </div>
+        </m-card>
+        } @empty {
+        <div class="no-results">
+          <p>Nenhuma reclamação encontrada para sua busca.</p>
+        </div>
+        }
+      </div>
+    </section>
+
+    <section class="map-section">
+      <div class="search-floating-container">
+        <m-form-input 
+          [formControl]="searchControl" 
+          [control]="searchControl" 
+          placeholder="Buscar reclamações por título, descrição ou categoria..."
+          icon="search">
+        </m-form-input>
+      </div>
+      <div class="map-wrapper">
+        <m-map [points]="mapPoints" [zoom]="14" (pointClick)="onMapPointClick($event)"></m-map>
+      </div>
+    </section>
+  </main>
+</div>

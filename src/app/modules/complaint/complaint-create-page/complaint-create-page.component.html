@@ -1,0 +1,142 @@
+<div class="page-container">
+  <div class="content-card">
+    <header class="form-header">
+      <h1>Criar Reclamação</h1>
+      <p>Siga os passos abaixo para relatar um problema na sua comunidade.</p>
+    </header>
+
+    <m-steps [steps]="steps" [currentStep]="currentStep"></m-steps>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-content">
+      
+      <!-- Step 1: Basic Information -->
+      <div class="step-pane" *ngIf="currentStep === 0" formGroupName="step1">
+        <h2 class="step-title">O que está acontecendo?</h2>
+        
+        <div class="inputs-grid">
+          <m-form-input 
+            label="Título da Reclamação" 
+            placeholder="Ex: Buraco na Rua das Palmeiras"
+            [control]="asFormControl(step1.get('title'))"
+            icon="title">
+          </m-form-input>
+
+          <m-form-select 
+            label="Categoria" 
+            [options]="categories"
+            [control]="asFormControl(step1.get('category'))"
+            placeholder="Selecione o tipo de problema"
+            icon="category">
+          </m-form-select>
+
+          <div class="full-width">
+            <m-form-input 
+              label="Descrição Detalhada" 
+              placeholder="Descreva o problema com detalhes..."
+              [control]="asFormControl(step1.get('description'))"
+              type="textarea"
+              icon="description">
+            </m-form-input>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Location -->
+      <div class="step-pane" *ngIf="currentStep === 1" formGroupName="step2">
+        <h2 class="step-title">Onde isso está ocorrendo?</h2>
+        
+        <div class="location-controls">
+          <div class="search-box">
+            <m-form-input 
+              label="Buscar Endereço" 
+              placeholder="Digite a rua, bairro ou cidade..."
+              [(ngModel)]="addressSearchQuery"
+              [ngModelOptions]="{standalone: true}"
+              (keyup.enter)="searchAddress()"
+              icon="search">
+            </m-form-input>
+            <button type="button" class="btn-search" (click)="searchAddress()" [disabled]="isSearching">
+              <span class="material-symbols-outlined">{{ isSearching ? 'sync' : 'search' }}</span>
+            </button>
+            
+            <div class="search-results" *ngIf="searchResults.length > 0">
+              <div class="result-item" *ngFor="let result of searchResults" (click)='selectSearchResult(result)'>
+                <span class="material-symbols-outlined">location_on</span>
+                <span class="result-text">{{ result.display_name }}</span>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn-location" (click)="useCurrentLocation()">
+            <span class="material-symbols-outlined">my_location</span>
+            Minha Localização
+          </button>
+        </div>
+
+        <div class="map-wrapper">
+          <m-map [points]="mapPoints" (pointClick)="onMapClick($event)"></m-map>
+          <div class="map-hint">
+            <span class="material-symbols-outlined">info</span>
+            Clique no mapa para marcar o local exato
+          </div>
+        </div>
+
+        <m-form-input 
+          label="Endereço Selecionado" 
+          [control]="asFormControl(step2.get('address'))"
+          icon="place"
+          [disabled]="true">
+        </m-form-input>
+      </div>
+
+      <!-- Step 3: Review & Privacy -->
+      <div class="step-pane" *ngIf="currentStep === 2" formGroupName="step3">
+        <h2 class="step-title">Finalizar e Publicar</h2>
+        
+        <div class="review-grid">
+          <div class="review-section">
+            <label>Visibilidade da Reclamação</label>
+            <m-form-select 
+              [options]="visibilityOptions"
+              [control]="asFormControl(step3.get('visibility'))"
+              icon="visibility">
+            </m-form-select>
+            <p class="visibility-hint">
+               {{ step3.get('visibility')?.value === 'public' ? 'Todos verão seu nome e a reclamação.' : '' }}
+               {{ step3.get('visibility')?.value === 'anonymous' ? 'Sua reclamação será pública, mas seu nome ficará oculto.' : '' }}
+               {{ step3.get('visibility')?.value === 'private' ? 'Apenas órgãos competentes terão acesso aos seus dados.' : '' }}
+            </p>
+          </div>
+
+          <div class="summary-card">
+            <h3>Resumo</h3>
+            <div class="summary-item">
+              <strong>Título:</strong> {{ step1.get('title')?.value }}
+            </div>
+            <div class="summary-item">
+              <strong>Categoria:</strong> {{ step1.get('category')?.value }}
+            </div>
+            <div class="summary-item">
+              <strong>Local:</strong> {{ step2.get('address')?.value }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <footer class="form-footer">
+        <button type="button" class="btn-secondary" (click)="prevStep()" *ngIf="currentStep > 0">
+          Voltar
+        </button>
+        <div class="spacer"></div>
+        <button type="button" class="btn-primary" (click)="nextStep()" *ngIf="currentStep < steps.length - 1">
+          Próximo
+        </button>
+        <button type="submit" class="btn-primary btn-submit" *ngIf="currentStep === steps.length - 1" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Enviando...' : 'Criar Reclamação' }}
+        </button>
+      </footer>
+
+    </form>
+  </div>
+</div>

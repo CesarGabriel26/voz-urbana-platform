@@ -4,19 +4,57 @@ import { LoginPage } from './modules/login-page/login-page.component';
 import { SignupPage } from './modules/signup-page/signup-page.component';
 import { authGuard } from './guards/auth.guard';
 import { MainLayoutComponent } from './modules/main-layout/main-layout.component';
+import { PetitionCreatePage } from './modules/petition/petition-create-page/petition-create-page.component';
+import { ComplaintListPage } from './modules/complaint/complaint-list-page/complaint-list-page.component';
+import { ComplaintCreatePage } from './modules/complaint/complaint-create-page/complaint-create-page.component';
+import { PetitionListPage } from './modules/petition/petition-list-page/petition-list-page.component';
 
 export const routes: Routes = [
     {
         path: '',
-        pathMatch: 'full',
         component: MainLayoutComponent,
-        // canActivate: [authGuard]
         children: [
             {
                 path: '',
                 pathMatch: 'full',
                 component: HomePage,
                 title: 'Voz Urbana - Home',
+            },
+            {
+                path: 'complaints',
+                title: 'Voz Urbana - Reclamações',
+                component: ComplaintListPage
+            },
+            {
+                path: 'complaint/create',
+                title: 'Voz Urbana - Criar Reclamação',
+                component: ComplaintCreatePage,
+                canActivate: [authGuard]
+            },
+            {
+                path: 'complaint/my',
+                title: 'Voz Urbana - Minhas Reclamações',
+                component: ComplaintListPage,
+                canActivate: [authGuard],
+                data: { isMyComplaints: true }
+            },
+            {
+                path: 'petitions',
+                title: 'Voz Urbana - Abaixo-Assinados',
+                component: PetitionListPage
+            },
+            {
+                path: 'petition/create',
+                title: 'Voz Urbana - Criar Abaixo-Assinado',
+                component: PetitionCreatePage,
+                canActivate: [authGuard]
+            },
+            {
+                path: 'petition/my',
+                title: 'Voz Urbana - Meus Abaixo-Assinados',
+                component: PetitionListPage,
+                canActivate: [authGuard],
+                data: { isMyPetitions: true }
             }
         ]
     },

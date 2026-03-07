@@ -65,7 +65,7 @@
 
     .floating-label {
       position: absolute;
-      left: 1rem;
+      left: 2.5rem;
       top: 50%;
       transform: translateY(-50%);
       color: var(--gray-9);
@@ -78,6 +78,7 @@
     .arrow {
       color: var(--gray-9);
       transition: transform 0.3s ease;
+
       &.rotated {
         transform: rotate(180deg);
         color: var(--blue-10);
@@ -89,8 +90,8 @@
   &.has-value {
     .select-wrapper {
       .floating-label {
-        top: 0.5rem;
-        left: 0.85rem;
+        top: 0.2rem;
+        left: 2.5rem;
         transform: translateY(0) scale(0.8);
         color: var(--blue-10);
         font-weight: 500;
@@ -186,6 +187,7 @@
   &.disabled {
     opacity: 0.6;
     cursor: not-allowed;
+
     .select-wrapper {
       background: var(--gray-3);
       border-color: var(--gray-5);
@@ -210,6 +212,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -220,13 +223,16 @@
 .dropdown::-webkit-scrollbar {
   width: 6px;
 }
+
 .dropdown::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .dropdown::-webkit-scrollbar-thumb {
   background: var(--gray-5);
   border-radius: 10px;
 }
+
 .dropdown::-webkit-scrollbar-thumb:hover {
   background: var(--gray-8);
 }

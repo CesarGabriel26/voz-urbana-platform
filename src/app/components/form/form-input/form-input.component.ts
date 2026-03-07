@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, forwardRef, OnInit, OnDestroy } from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 
 @Component({
-  selector: 'app-form-input',
+  selector: 'm-form-input',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './form-input.component.html',
@@ -27,13 +27,35 @@ export class FormInputComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() control!: FormControl;
   @Input() icon?: string;
+  @Input() disabled: boolean = false;
+  private statusSub: any;
+  private valueSub: any;
 
   value: any = '';
   isFocused: boolean = false;
-  disabled: boolean = false;
 
   onChange: any = () => { };
   onTouched: any = () => { };
+
+  ngOnInit(): void {
+    if (this.control) {
+      this.value = this.control.value;
+      this.disabled = this.control.disabled;
+
+      this.valueSub = this.control.valueChanges.subscribe(val => {
+        this.value = val;
+      });
+
+      this.statusSub = this.control.statusChanges.subscribe(() => {
+        this.disabled = this.control.disabled;
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.valueSub) this.valueSub.unsubscribe();
+    if (this.statusSub) this.statusSub.unsubscribe();
+  }
 
   writeValue(value: any): void {
     this.value = value;
@@ -55,6 +77,11 @@ export class FormInputComponent implements ControlValueAccessor {
     const input = event.target as HTMLInputElement;
     this.value = input.value;
     this.onChange(this.value);
+    
+    // Also update control directly if passed as Input
+    if (this.control) {
+      this.control.setValue(this.value, { emitEvent: true });
+    }
   }
 
   handleFocus(): void {

@@ -1,4 +1,4 @@
-<nav [class.open]="isMenuOpen()">
+<nav [class.open]="isMenuOpen()" [class.sticky]="position === 'sticky'">
     <div class="nav-container">
         <div class="logo" routerLink="/">
             @if(brandLogo !== ''){
@@ -15,7 +15,9 @@
                     @for(item of primaryItems; track $index){
                     @if (shouldShowItem(item)) {
                     <li class="link-item" [class.has-dropdown]="item.children"
-                        [class.dropdown-active]="isDropdownOpen(item)" routerLinkActive="active"
+                        [class.dropdown-active]="isDropdownOpen(item)"
+                        [routerLinkActive]="'active'"
+                        [routerLinkActiveOptions]="item.exact ? { exact: true } : { exact: false }"
                         (click)="item.children ? toggleDropdown(item, $event) : closeMenu()">
 
                         @if (item.children) {
@@ -28,7 +30,7 @@
                                 @for(child of item.children; track $index) {
                                 @if (shouldShowItem(child)) {
                                 <li class="dropdown-item" (click)="closeMenu(); $event.stopPropagation()">
-                                    <a [routerLink]="child.link">{{ child.label }}</a>
+                                    <a [routerLink]="child.link" routerLinkActive="active">{{ child.label }}</a>
                                 </li>
                                 }
                                 }
