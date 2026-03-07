@@ -1,0 +1,70 @@
+.demo-card {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+
+  .header {
+    margin-bottom: 2.5rem;
+    text-align: center;
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--gray-12);
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: var(--gray-9);
+      font-size: 1rem;
+    }
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+
+    .btn-primary {
+      background: var(--blue-10);
+      color: white;
+      padding: 1rem 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      min-width: 200px;
+
+      span {
+        color: white;
+      }
+
+      &:hover:not(:disabled) {
+        background: var(--blue-11);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 96, 236, 0.3);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+}

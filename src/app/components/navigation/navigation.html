@@ -1,0 +1,69 @@
+<nav [class.open]="isMenuOpen()">
+    <div class="nav-container">
+        <div class="logo" routerLink="/">
+            @if(brandLogo !== ''){
+            <img [src]="brandLogo" [alt]="brandName">
+            }
+            @if(brandName !== ''){
+            <h1>{{ brandName }}</h1>
+            }
+        </div>
+
+        <div class="nav-content" [class.active]="isMenuOpen()">
+            <div class="links-wrapper">
+                <ul class="nav-links primary">
+                    @for(item of primaryItems; track $index){
+                    @if (shouldShowItem(item)) {
+                    <li class="link-item" [class.has-dropdown]="item.children"
+                        [class.dropdown-active]="isDropdownOpen(item)" routerLinkActive="active"
+                        (click)="item.children ? toggleDropdown(item, $event) : closeMenu()">
+
+                        @if (item.children) {
+                        <a class="dropdown-trigger">
+                            {{ item.label }}
+                            <span class="material-symbols-outlined icon-small">expand_more</span>
+                        </a>
+                        <ul class="dropdown-menu" (click)="$event.stopPropagation()">
+                            <div class="dropdown-menu-content">
+                                @for(child of item.children; track $index) {
+                                @if (shouldShowItem(child)) {
+                                <li class="dropdown-item" (click)="closeMenu(); $event.stopPropagation()">
+                                    <a [routerLink]="child.link">{{ child.label }}</a>
+                                </li>
+                                }
+                                }
+                            </div>
+                        </ul>
+                        } @else {
+                        <a [routerLink]="item.link">{{ item.label }}</a>
+                        }
+                    </li>
+                    }
+                    }
+                </ul>
+
+                <div class="extra-content">
+                    <ng-content></ng-content>
+                </div>
+
+                <ul class="nav-links secondary">
+                    @for(item of secondaryItems; track $index){
+                    @if (shouldShowItem(item)) {
+                    <li class="btn-link" routerLinkActive="active" (click)="closeMenu()">
+                        <a [routerLink]="item.link" class="btn btn-ghost">{{ item.label }}</a>
+                    </li>
+                    }
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <button class="btn menu-toggle" (click)="toggleMenu()" aria-label="Toggle navigation">
+            <span class="material-symbols-outlined">{{ isMenuOpen() ? 'close' : 'menu' }}</span>
+        </button>
+    </div>
+
+    @if(isMenuOpen()){
+    <div class="nav-backdrop" (click)="closeMenu()"></div>
+    }
+</nav>

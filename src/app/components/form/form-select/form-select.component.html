@@ -1,0 +1,49 @@
+<div class="form-select-container" [class.open]="isOpen" [class.has-value]="value !== null" [class.has-error]="showErrors" [class.disabled]="disabled">
+  <div class="select-wrapper" (click)="toggleDropdown()">
+    <span *ngIf="icon && !isOpen" class="material-symbols-outlined icon">{{ icon }}</span>
+
+    <div class="content">
+      <span class="selected-text" *ngIf="!isOpen">{{ selectedLabel }}</span>
+      
+      <div class="search-box" *ngIf="isOpen" (click)="$event.stopPropagation()">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input 
+          #searchInput
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          [ngModelOptions]="{standalone: true}"
+          [placeholder]="placeholder"
+        />
+      </div>
+    </div>
+
+    <label class="floating-label">{{ label }}</label>
+
+    <span class="material-symbols-outlined arrow" [class.rotated]="isOpen">
+      expand_more
+    </span>
+  </div>
+
+  <div class="dropdown" *ngIf="isOpen" (click)="$event.stopPropagation()">
+    <div class="options-list">
+      <div 
+        *ngFor="let option of filteredOptions" 
+        class="option-item" 
+        [class.selected]="option.value === value"
+        (click)="selectOption(option)"
+      >
+        <span *ngIf="option.icon" class="material-symbols-outlined option-icon">{{ option.icon }}</span>
+        <span class="option-label">{{ option.label }}</span>
+        <span *ngIf="option.value === value" class="material-symbols-outlined check">check</span>
+      </div>
+      
+      <div class="no-options" *ngIf="filteredOptions.length === 0">
+        Nenhum resultado encontrado
+      </div>
+    </div>
+  </div>
+
+  <div class="error-wrapper" *ngIf="showErrors">
+    <span class="error-message">{{ errorMessage }}</span>
+  </div>
+</div>

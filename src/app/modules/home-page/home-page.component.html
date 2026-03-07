@@ -1,0 +1,60 @@
+<header>
+    <m-nav [primaryItems]="navItems" [secondaryItems]="authItems"></m-nav>
+</header>
+
+<main class="content-container">
+    <section class="hero-section">
+        <m-carousel [interval]="6000">
+            <ng-template mCarouselItem>
+                <div class="carousel-content-card">
+                    <h2>Bem-vindo ao Voz Urbana</h2>
+                    <p>Sua plataforma para participação social e melhoria da cidade.</p>
+                </div>
+            </ng-template>
+            <ng-template mCarouselItem>
+                <div class="carousel-content-card">
+                    <h2>Abaixo Assinados</h2>
+                    <p>Crie e apoie causas que importam para sua comunidade.</p>
+                </div>
+            </ng-template>
+            <ng-template mCarouselItem>
+                <div class="carousel-content-card">
+                    <h2>Reclamações Digitais</h2>
+                    <p>Relate problemas em sua rua ou bairro de forma fácil e rápida.</p>
+                </div>
+            </ng-template>
+        </m-carousel>
+    </section>
+
+    <section class="cards-section">
+        <h3>Reclamações Recentes</h3>
+        <m-pagination position="left" [totalItems]="complaints.length" [pageSize]="pageSize" [currentPage]="complaintsPage"
+            (pageChange)="onComplaintsPageChange($event)">
+        </m-pagination>
+        <div class="cards-grid">
+            @for (item of paginatedComplaints; track $index) {
+            <m-card [color]="item.color">
+                <h4 title>{{ item.title }}</h4>
+                <p content>{{ item.description }}</p>
+                <div footer><span>{{ item.date }}</span> <a href="#">ver mais</a></div>
+            </m-card>
+            }
+        </div>
+    </section>
+
+    <section class="cards-section">
+        <h3>Abaixo Assinados Recentes</h3>
+        <m-pagination position="left" [totalItems]="petitions.length" [pageSize]="pageSize" [currentPage]="petitionsPage"
+            (pageChange)="onPetitionsPageChange($event)">
+        </m-pagination>
+        <div class="cards-grid">
+            @for (item of paginatedPetitions; track $index) {
+            <m-card [color]="item.color">
+                <h4 title>{{ item.title }}</h4>
+                <p content>{{ item.description }}</p>
+                <div footer><span>{{ item.date }}</span> <a href="#">ver mais</a></div>
+            </m-card>
+            }
+        </div>
+    </section>
+</main>

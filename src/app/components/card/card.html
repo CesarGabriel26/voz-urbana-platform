@@ -1,0 +1,14 @@
+<div class="card-container" [style.--card-border-color]="color">
+  <div class="card-top-bar"></div>
+  <div class="card-body">
+    <div class="card-title">
+      <ng-content select="[title]"></ng-content>
+    </div>
+    <div class="card-content">
+      <ng-content select="[content]"></ng-content>
+    </div>
+  </div>
+  <div class="card-footer">
+    <ng-content select="[footer]"></ng-content>
+  </div>
+</div>

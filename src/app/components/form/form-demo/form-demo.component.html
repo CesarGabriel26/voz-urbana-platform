@@ -1,0 +1,69 @@
+<div class="demo-card">
+  <div class="header">
+    <h2>Relatar Problema</h2>
+    <p>Preencha os campos abaixo para nos ajudar a melhorar sua cidade.</p>
+  </div>
+
+  <form [formGroup]="demoForm" (ngSubmit)="onSubmit()">
+    <div class="grid">
+      <app-form-input
+        label="Nome Completo"
+        placeholder="Ex: João Silva"
+        icon="person"
+        formControlName="name"
+        [control]="$any(getControl('name'))"
+      ></app-form-input>
+
+      <app-form-input
+        label="E-mail"
+        type="email"
+        placeholder="joao@exemplo.com"
+        icon="mail"
+        formControlName="email"
+        [control]="$any(getControl('email'))"
+      ></app-form-input>
+    </div>
+
+    <div class="grid">
+      <app-form-input
+        label="Telefone (Opcional)"
+        placeholder="11999999999"
+        icon="call"
+        formControlName="phone"
+        [control]="$any(getControl('phone'))"
+      ></app-form-input>
+
+      <app-form-select
+        label="Tipo de Relato"
+        [options]="typeOptions"
+        icon="settings"
+        formControlName="type"
+        [control]="$any(getControl('type'))"
+      ></app-form-select>
+    </div>
+
+    <app-form-select
+      label="Categoria do Problema"
+      [options]="categoryOptions"
+      placeholder="Pesquise a categoria..."
+      icon="category"
+      formControlName="category"
+      [control]="$any(getControl('category'))"
+    ></app-form-select>
+
+    <app-form-input
+      label="Descrição Detalhada"
+      placeholder="Descreva o que aconteceu..."
+      icon="description"
+      formControlName="description"
+      [control]="$any(getControl('description'))"
+    ></app-form-input>
+
+    <div class="actions">
+      <button type="submit" class="btn btn-primary" [disabled]="demoForm.invalid && demoForm.touched">
+        <span class="material-symbols-outlined">send</span>
+        Enviar Relato
+      </button>
+    </div>
+  </form>
+</div>

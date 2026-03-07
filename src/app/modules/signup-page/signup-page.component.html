@@ -1,0 +1,80 @@
+<div class="signup-container">
+  <div class="signup-card">
+    <div class="signup-header">
+      <h1>Criar Conta</h1>
+      <p>Junte-se ao Voz Urbana para melhorar sua cidade</p>
+    </div>
+
+    <app-steps [steps]="steps" [currentStep]="currentStep"></app-steps>
+
+    <div class="privacy-notice" *ngIf="currentStep === 0">
+      <span class="material-symbols-outlined">info</span>
+      <p>Seus dados são usados apenas para validar sua identidade.</p>
+    </div>
+
+    <div class="form-steps-container">
+      <!-- Step 1: Identity -->
+      <form *ngIf="currentStep === 0" [formGroup]="identityForm" class="signup-form">
+        <app-form-input label="Nome Completo" placeholder="Ex: João da Silva" formControlName="name"
+          [control]="$any(identityForm.get('name'))" icon="person"></app-form-input>
+
+        <app-form-input label="CPF" placeholder="000.000.000-00" formControlName="cpf"
+          [control]="$any(identityForm.get('cpf'))" icon="badge"></app-form-input>
+
+        <app-form-input label="Data de Nascimento" type="date" formControlName="birthDate"
+          [control]="$any(identityForm.get('birthDate'))" icon="calendar_today"></app-form-input>
+      </form>
+
+      <!-- Step 2: Contact -->
+      <form *ngIf="currentStep === 1" [formGroup]="contactForm" class="signup-form">
+        <app-form-input label="E-mail" type="email" placeholder="seu@email.com" formControlName="email"
+          [control]="$any(contactForm.get('email'))" icon="mail"></app-form-input>
+
+        <app-form-input label="Telefone (Opcional)" placeholder="11999998888" formControlName="phone"
+          [control]="$any(contactForm.get('phone'))" icon="call"></app-form-input>
+      </form>
+
+      <!-- Step 3: Security -->
+      <form *ngIf="currentStep === 2" [formGroup]="securityForm" class="signup-form">
+        <div class="password-field-group">
+          <app-form-input label="Senha" type="password" placeholder="Mínimo 8 caracteres, número e símbolo"
+            formControlName="password" [control]="$any(securityForm.get('password'))" icon="lock_open"></app-form-input>
+
+          <div class="password-strength-wrapper" *ngIf="securityForm.get('password')?.value">
+            <div class="strength-meter">
+              <div class="strength-bar" [style.width.%]="(passwordStrength / 4) * 100"
+                [style.background-color]="passwordStrengthColor"></div>
+            </div>
+            <span class="strength-text" [style.color]="passwordStrengthColor">{{ passwordStrengthText }}</span>
+          </div>
+        </div>
+
+        <app-form-input label="Confirmar Senha" type="password" placeholder="Repita sua senha"
+          formControlName="confirmPassword" [control]="$any(securityForm.get('confirmPassword'))"
+          icon="lock"></app-form-input>
+      </form>
+    </div>
+
+    <div class="signup-actions">
+      <button *ngIf="currentStep > 0" (click)="prevStep()" class="btn btn-ghost">
+        <span class="material-symbols-outlined">arrow_back</span>
+        Voltar
+      </button>
+
+      <button *ngIf="currentStep < steps.length - 1" (click)="nextStep()" class="btn btn-primary next-button">
+        Próximo
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </button>
+
+      <button *ngIf="currentStep === steps.length - 1" (click)="onSubmit()" class="btn btn-primary submit-button"
+        [disabled]="!identityForm.valid || !contactForm.valid || !securityForm.valid">
+        Finalizar Cadastro
+        <span class="material-symbols-outlined">check_circle</span>
+      </button>
+    </div>
+
+    <div class="signup-footer">
+      <p>Já tem uma conta? <a href="/login">Entre agora</a></p>
+    </div>
+  </div>
+</div>

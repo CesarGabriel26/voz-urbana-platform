@@ -1,0 +1,27 @@
+<div class="carousel-container" (mouseenter)="autoPlay = false" (mouseleave)="autoPlay = true">
+  <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
+    <div class="carousel-item" *ngFor="let item of items">
+      <ng-container [ngTemplateOutlet]="item.template"></ng-container>
+    </div>
+  </div>
+
+  <!-- Indicators -->
+  <div class="carousel-indicators" *ngIf="showIndicators">
+    <button
+      *ngFor="let item of items; let i = index"
+      [class.active]="i === currentIndex()"
+      (click)="goToSlide(i)"
+      aria-label="Ir para o slide {{ i + 1 }}"
+    ></button>
+  </div>
+
+  <!-- Controls -->
+  <ng-container *ngIf="showControls">
+    <button class="carousel-control prev" (click)="prev()" aria-label="Slide anterior">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
+    <button class="carousel-control next" (click)="next()" aria-label="Próximo slide">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </button>
+  </ng-container>
+</div>

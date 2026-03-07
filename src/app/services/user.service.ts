@@ -1,0 +1,47 @@
+import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { User, SignupRequest } from '../models/user.model';
+import { Observable, of } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  // Assuming a base API URL
+  private readonly apiUrl = 'api/users';
+
+  constructor(private http: HttpClient) { }
+
+  create(data: SignupRequest): Observable<User> {
+    // Logic to create user
+    // return this.http.post<User>(`${this.apiUrl}`, data);
+
+    // Mock for now as requested
+    const mockUser: User = {
+      id: Math.random().toString(36).substring(7),
+      name: data.name,
+      email: data.email,
+      phoneNumber: data.phone,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    return of(mockUser);
+  }
+
+  update(id: string, data: Partial<User>): Observable<User> {
+    // Logic to update user
+    // return this.http.patch<User>(`${this.apiUrl}/${id}`, data);
+
+    // Mock for now
+    const mockUser: User = {
+      id,
+      name: data.name || 'Mock User',
+      email: data.email || 'mock@example.com',
+      phoneNumber: data.phoneNumber,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      ...data
+    };
+    return of(mockUser);
+  }
+}

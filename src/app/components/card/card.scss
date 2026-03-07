@@ -1,0 +1,90 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.card-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+}
+
+.card-top-bar {
+    height: 6px;
+    width: 100%;
+    background-color: var(--card-border-color, var(--blue-10));
+}
+
+.card-body {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.card-title {
+    ::ng-deep * {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--gray-12);
+        line-height: 1.4;
+    }
+}
+
+.card-content {
+    ::ng-deep * {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--gray-11);
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
+.card-footer {
+    padding: 0.75rem 1.25rem;
+    border-top: 1px solid #f0f0f0;
+    background: #fafafa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    ::ng-deep div {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    ::ng-deep * {
+        font-weight: 500;
+        font-size: 0.85rem;
+        color: var(--gray-9);
+    }
+
+    ::ng-deep a {
+        color: var(--blue-10);
+        text-decoration: none;
+        font-weight: 600;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

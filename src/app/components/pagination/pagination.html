@@ -1,0 +1,28 @@
+<nav class="pagination-container" *ngIf="totalPages() > 1" [ngClass]="position">
+  <button class="pagination-btn" [disabled]="currentPage === 1" (click)="setPage(1)" aria-label="Primeira página">
+    <span class="material-symbols-outlined">first_page</span>
+  </button>
+  
+  <button class="pagination-btn" [disabled]="currentPage === 1" (click)="setPage(currentPage - 1)" aria-label="Página anterior">
+    <span class="material-symbols-outlined">chevron_left</span>
+  </button>
+
+  <div class="pagination-pages">
+    <button 
+      *ngFor="let page of pages" 
+      class="pagination-btn page-num" 
+      [class.active]="page === currentPage"
+      (click)="setPage(page)"
+    >
+      {{ page }}
+    </button>
+  </div>
+
+  <button class="pagination-btn" [disabled]="currentPage === totalPages()" (click)="setPage(currentPage + 1)" aria-label="Próxima página">
+    <span class="material-symbols-outlined">chevron_right</span>
+  </button>
+
+  <button class="pagination-btn" [disabled]="currentPage === totalPages()" (click)="setPage(totalPages())" aria-label="Última página">
+    <span class="material-symbols-outlined">last_page</span>
+  </button>
+</nav>

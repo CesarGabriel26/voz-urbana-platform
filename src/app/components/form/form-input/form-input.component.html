@@ -1,0 +1,22 @@
+<div class="form-input-container" [class.focused]="isFocused" [class.has-value]="value" [class.has-error]="showErrors" [class.disabled]="disabled">
+  <div class="input-wrapper">
+    <span *ngIf="icon" class="material-symbols-outlined icon">{{ icon }}</span>
+
+    <input
+      [type]="type"
+      [placeholder]="isFocused ? placeholder : ''"
+      [value]="value"
+      (input)="handleInput($event)"
+      (focus)="handleFocus()"
+      (blur)="handleBlur()"
+      [disabled]="disabled"
+      id="input-{{ label }}"
+    />
+
+    <label [for]="'input-' + label" class="floating-label">{{ label }}</label>
+  </div>
+
+  <div class="error-wrapper" *ngIf="showErrors">
+    <span class="error-message">{{ errorMessage }}</span>
+  </div>
+</div>

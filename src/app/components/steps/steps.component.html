@@ -1,0 +1,14 @@
+<div class="steps-container">
+  <div *ngFor="let step of steps; let i = index" class="step-item" [class.active]="isActive(i)"
+    [class.completed]="isCompleted(i)">
+
+    <div class="step-indicator">
+      <span *ngIf="!isCompleted(i)">{{ i + 1 }}</span>
+      <span *ngIf="isCompleted(i)" class="material-symbols-outlined">check</span>
+    </div>
+
+    <span class="step-label">{{ step }}</span>
+
+    <div *ngIf="i < steps.length - 1" class="step-connector"></div>
+  </div>
+</div>
