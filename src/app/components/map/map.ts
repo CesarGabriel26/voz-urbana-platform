@@ -85,7 +85,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   private loadHeatMap() {
     if (!this.points.length) return;
 
-    const heatPoints = this.points.map(p => [p.lat, p.lng, 0.5]);
+    const heatPoints = this.points.map(p => [p.lat, p.lng, .5]);
 
     if (this.heatLayer) {
       this.map.removeLayer(this.heatLayer);

@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, inject } from '@angular/core';
+import { Component, ViewChild, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, ActivatedRoute } from '@angular/router';
@@ -7,6 +7,8 @@ import { Card } from '../../../components/card/card';
 import { FormInputComponent } from '../../../components/form/form-input/form-input.component';
 import { ComplaintService } from '../../../services/complaint.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { Complaint } from '../../../types/Complaint';
+import { PrioritiesColors } from '../../../utils/consts';
 
 @Component({
   selector: 'app-complaint-list-page',
@@ -16,6 +18,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   styleUrl: './complaint-list-page.component.scss'
 })
 export class ComplaintListPage implements OnInit {
+  PrioritiesColors = PrioritiesColors;
+
   @ViewChild(MapComponent) map!: MapComponent;
 
   private complaintService = inject(ComplaintService);
@@ -23,7 +27,7 @@ export class ComplaintListPage implements OnInit {
 
   searchControl = new FormControl('');
   isMyComplaints = false;
-  complaints: any[] = [];
+  complaints = signal<Complaint[]>([]);
   isLoading = true;
 
   ngOnInit() {
@@ -45,12 +49,12 @@ export class ComplaintListPage implements OnInit {
 
   loadComplaints() {
     this.isLoading = true;
-    const obs = this.isMyComplaints 
-      ? this.complaintService.getMyComplaints() 
+    const obs = this.isMyComplaints
+      ? this.complaintService.getMyComplaints()
       : this.complaintService.getComplaints();
 
     obs.subscribe(data => {
-      this.complaints = data;
+      this.complaints.set(data);
       this.isLoading = false;
     });
   }
@@ -68,9 +72,9 @@ export class ComplaintListPage implements OnInit {
 
   get filteredComplaints() {
     const search = this.searchControl.value?.toLowerCase() || '';
-    if (!search) return this.complaints;
-    return this.complaints.filter(c => 
-      c.title.toLowerCase().includes(search) || 
+    if (!search) return this.complaints();
+    return this.complaints().filter(c =>
+      c.title.toLowerCase().includes(search) ||
       c.description.toLowerCase().includes(search) ||
       c.category.toLowerCase().includes(search)
     );
@@ -82,14 +86,14 @@ export class ComplaintListPage implements OnInit {
       lat: c.lat,
       lng: c.lng,
       title: c.title,
-      color: c.color,
+      color: this.PrioritiesColors[c.priority],
       popupContent: `
         <div style="font-family: 'Raleway', sans-serif;">
           <strong style="color: var(--blue-10); font-size: 1.1rem;">${c.title}</strong>
           <p style="margin: 8px 0; font-size: 0.9rem; color: var(--gray-11);">${c.description.substring(0, 100)}...</p>
           <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--gray-5); padding-top: 8px;">
-            <span style="font-size: 0.8rem; font-weight: 600; color: ${c.color};">${c.category}</span>
-            <span style="font-size: 0.8rem; color: var(--gray-9);">${c.date}</span>
+            <span style="font-size: 0.8rem; font-weight: 600; color: ${this.PrioritiesColors[c.priority]};">${c.category}</span>
+            <span style="font-size: 0.8rem; color: var(--gray-9);">${c.createdAt.toLocaleDateString()}</span>
           </div>
         </div>
       `

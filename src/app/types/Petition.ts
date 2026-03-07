@@ -15,7 +15,7 @@ export interface Petition {
     signaturesCount: number;
     
     // Abrangência para validar os 5% do eleitorado municipal
-    scope: "neighborhood" | "city" | "state";
+    scope: string | "neighborhood" | "city" | "state";
     cityIbgeCode?: string; // Útil para cruzar com dados do TSE
 
     visibility: Visibility;

@@ -1,0 +1,98 @@
+<div class="about-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <span class="badge">Inovação e Cidadania</span>
+      <h1>Sobre o Voz Urbana</h1>
+      <p class="lead">
+        Uma plataforma digital criada para aproximar a população da gestão da cidade e transformar a realidade urbana através da tecnologia.
+      </p>
+    </div>
+    <div class="hero-visual">
+        <div class="glass-card main-card">
+            <span class="material-symbols-outlined large-icon">location_city</span>
+            <h3>Cidades Inteligentes</h3>
+            <p>Construídas por pessoas reais.</p>
+        </div>
+        <div class="pulse-circle one"></div>
+        <div class="pulse-circle two"></div>
+    </div>
+  </section>
+
+  <!-- Project Description -->
+  <section class="info-section glass">
+    <div class="section-header">
+        <h2>Nossa Iniciativa</h2>
+        <div class="divider"></div>
+    </div>
+    <div class="content-grid-half">
+        <div class="text-block">
+            <p>
+                O <strong>Voz Urbana</strong> permite que cidadãos registrem problemas urbanos, compartilhem situações que precisam de atenção e participem ativamente da construção de melhorias para sua região.
+            </p>
+            <p>
+                Reporte questões como infraestrutura danificada, iluminação pública ou descarte de lixo. Vá além: crie <strong>abaixo-assinados</strong> e mobilize sua comunidade por mudanças reais junto à administração pública.
+            </p>
+        </div>
+        <div class="stats-box">
+            <div class="stat-item">
+                <span class="stat-value">Digital</span>
+                <span class="stat-label">Processo sem burocracia</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">Coletivo</span>
+                <span class="stat-label">Poder da comunidade</span>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- Goals -->
+  <section class="goals-section">
+    <div class="section-header centered">
+        <h2>Objetivos do Projeto</h2>
+        <p>Fortalecendo o engajamento social em cada etapa.</p>
+    </div>
+    <div class="goals-grid">
+        <div class="goal-card" *ngFor="let goal of goals">
+            <div class="icon-wrapper">
+                <span class="material-symbols-outlined">{{ goal.icon }}</span>
+            </div>
+            <h3>{{ goal.title }}</h3>
+            <p>{{ goal.description }}</p>
+        </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section class="team-section">
+    <div class="section-header centered">
+        <h2>Autores do Projeto</h2>
+        <p>Originalmente desenvolvido no SENAI como uma solução tecnológica para a cidadania.</p>
+    </div>
+    <div class="team-grid">
+        <div class="team-card" *ngFor="let member of team">
+            <div class="member-avatar">
+                {{ member.initials }}
+            </div>
+            <div class="member-info">
+                <h3>{{ member.name }}</h3>
+                <span class="role">{{ member.role }}</span>
+                <p>{{ member.description }}</p>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="cta-section">
+    <div class="glass-cta">
+        <h2>Sua voz tem poder.</h2>
+        <p>Comece hoje mesmo a transformar seu bairro.</p>
+        <div class="cta-actions">
+            <a routerLink="/complaint/create" class="btn-about primary">Reportar Problema</a>
+            <a routerLink="/petitions" class="btn-about secondary">Ver Petições</a>
+        </div>
+    </div>
+  </section>
+</div>

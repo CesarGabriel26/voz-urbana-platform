@@ -11,6 +11,7 @@ import { Component, Input } from '@angular/core';
 export class StepsComponent {
   @Input() steps: string[] = [];
   @Input() currentStep: number = 0;
+  @Input() type: 'horizontal' | 'vertical' | 'progress' = 'horizontal';
 
   isCompleted(index: number): boolean {
     return index < this.currentStep;

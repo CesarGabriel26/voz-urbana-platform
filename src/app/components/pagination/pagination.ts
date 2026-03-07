@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, signal, computed, effect } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,15 +10,17 @@ import { CommonModule } from '@angular/common';
 })
 export class Pagination {
   @Input() totalItems = 0;
-  @Input() pageSize = 10;
+  @Input() pageSize = 4;
   @Input() currentPage = 1;
   @Input() position: 'center' | 'left' | 'right' = 'center';
   @Output() pageChange = new EventEmitter<number>();
 
-  totalPages = computed(() => Math.ceil(this.totalItems / this.pageSize));
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.pageSize);
+  }
 
   get pages(): number[] {
-    const total = this.totalPages();
+    const total = this.totalPages;
     const current = this.currentPage;
     const maxVisible = 5;
     
@@ -29,11 +31,11 @@ export class Pagination {
       start = Math.max(1, end - maxVisible + 1);
     }
     
-    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+    return Array.from({ length: Math.max(0, end - start + 1) }, (_, i) => start + i);
   }
 
   setPage(page: number) {
-    if (page >= 1 && page <= this.totalPages() && page !== this.currentPage) {
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
       this.pageChange.emit(page);
     }
   }

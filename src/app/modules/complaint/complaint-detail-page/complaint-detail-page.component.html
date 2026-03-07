@@ -1,0 +1,64 @@
+<div class="detail-page-container" *ngIf="complaint">
+  @if(complaint()) {
+  <header class="detail-header">
+    <div class="header-top">
+      <a routerLink="/complaints" class="back-link">
+        <span class="material-symbols-outlined">arrow_back</span>
+        Voltar para a lista
+      </a>
+      <div class="priority-badge" [style.background-color]="getPriorityColor()">
+        Prioridade {{ complaint()?.priority }}
+      </div>
+    </div>
+
+    <div class="title-section">
+      <h1>{{ complaint()?.title }}</h1>
+      <div class="meta-info">
+        <span class="category-tag">{{ complaint()?.category }}</span>
+        <span class="date-tag">Criado em {{ complaint()?.createdAt | date:'dd/MM/yyyy' }}</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="detail-content">
+    <section class="status-section">
+      <h3>Situação da Reclamação</h3>
+      <m-steps [steps]="steps" [currentStep]="getCurrentStep()" type="vertical"></m-steps>
+    </section>
+
+    <div class="content-grid">
+      <div class="info-card description-card">
+        <h3>Descrição</h3>
+        <p>{{ complaint()?.description }}</p>
+      </div>
+
+      <div class="info-card location-card">
+        <h3>Localização</h3>
+        <div class="location-details">
+          <span class="material-symbols-outlined">location_on</span>
+          <p>{{ complaint()?.address }}</p>
+        </div>
+        <!-- Future: Map view here -->
+      </div>
+
+      <div class="info-card extra-info-card">
+        <h3>Outras Informações</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Visibilidade:</label>
+            <span>{{ complaint()?.visibility === 'public' ? 'Pública' : 'Privada' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Última Atualização:</label>
+            <span>{{ complaint()?.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div *ngIf="complaint()?.resolvedAt" class="info-item">
+            <label>Resolvido em:</label>
+            <span>{{ complaint()?.resolvedAt | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  }
+</div>

@@ -13,12 +13,12 @@
 
       <div class="cards-list">
         @for (item of filteredComplaints; track item.id) {
-        <m-card [id]="'complaint-' + item.id" [color]="item.color" (click)="onCardClick(item)" style="cursor: pointer;">
+        <m-card [id]="'complaint-' + item.id" [color]="PrioritiesColors[item.priority]" (click)="onCardClick(item)" style="cursor: pointer;">
           <h3 title>{{ item.title }}</h3>
           <p content>{{ item.description }}</p>
           <div footer>
             <span class="category">{{ item.category }}</span>
-            <span class="date">{{ item.date }}</span>
+            <span class="date">{{ item.createdAt.toLocaleDateString() }}</span>
             <a class="more-link" [routerLink]="['/complaint', item.id]">ver detalhes</a>
           </div>
         </m-card>
@@ -40,7 +40,7 @@
         </m-form-input>
       </div>
       <div class="map-wrapper">
-        <m-map [points]="mapPoints" [zoom]="14" (pointClick)="onMapPointClick($event)"></m-map>
+        <m-map [points]="mapPoints" [zoom]="14" (pointClick)="onMapPointClick($event)" ></m-map>
       </div>
     </section>
   </main>

@@ -16,8 +16,8 @@ export interface Complaint {
 
     status: "pending" | "in-progress" | "resolved" | "rejected"
 
-    latitude: number
-    longitude: number
+    lat: number
+    lng: number
     address?: string
 
     createdBy: string

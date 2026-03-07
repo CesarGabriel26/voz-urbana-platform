@@ -1,14 +1,38 @@
-<div class="steps-container">
-  <div *ngFor="let step of steps; let i = index" class="step-item" [class.active]="isActive(i)"
-    [class.completed]="isCompleted(i)">
+<div class="steps-container" [ngClass]="'steps-' + type">
+  
+  <!-- Horizontal and Vertical Styles -->
+  <ng-container *ngIf="type !== 'progress'">
+    <div *ngFor="let step of steps; let i = index" class="step-item" 
+      [class.active]="isActive(i)"
+      [class.completed]="isCompleted(i)">
 
-    <div class="step-indicator">
-      <span *ngIf="!isCompleted(i)">{{ i + 1 }}</span>
-      <span *ngIf="isCompleted(i)" class="material-symbols-outlined">check</span>
+      <div class="step-indicator">
+        <span *ngIf="!isCompleted(i)">{{ i + 1 }}</span>
+        <span *ngIf="isCompleted(i)" class="material-symbols-outlined">check</span>
+      </div>
+
+      <div class="step-content">
+        <span class="step-label">{{ step }}</span>
+      </div>
+
+      <div *ngIf="i < steps.length - 1" class="step-connector"></div>
     </div>
+  </ng-container>
 
-    <span class="step-label">{{ step }}</span>
+  <!-- Progress Style (Compact/Mobile) -->
+  <ng-container *ngIf="type === 'progress'">
+    <div class="progress-compact">
+      <div class="progress-info">
+        <div class="progress-count">{{ currentStep + 1 }} de {{ steps.length }}</div>
+        <div class="progress-labels">
+          <span class="current-label">{{ steps[currentStep] }}</span>
+          <span class="next-label" *ngIf="currentStep < steps.length - 1">Próximo: {{ steps[currentStep + 1] }}</span>
+        </div>
+      </div>
+      <div class="progress-bar-mini">
+        <div class="progress-bar-fill" [style.width]="((currentStep + 1) / steps.length) * 100 + '%'"></div>
+      </div>
+    </div>
+  </ng-container>
 
-    <div *ngIf="i < steps.length - 1" class="step-connector"></div>
-  </div>
 </div>

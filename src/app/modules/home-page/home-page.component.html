@@ -1,6 +1,4 @@
-
-
-<main class="content-container">
+<main class="content">
     <section class="hero-section">
         <m-carousel [interval]="6000">
             <ng-template mCarouselItem>
@@ -26,15 +24,16 @@
 
     <section class="cards-section">
         <h3>Reclamações Recentes</h3>
-        <m-pagination position="left" [totalItems]="complaints.length" [pageSize]="pageSize" [currentPage]="complaintsPage"
+        <m-pagination position="left" [totalItems]="complaints().length" [currentPage]="complaintsPage()"
             (pageChange)="onComplaintsPageChange($event)">
         </m-pagination>
         <div class="cards-grid">
             @for (item of paginatedComplaints; track $index) {
-            <m-card [color]="item.color">
-                <h4 title>{{ item.title }}</h4>
+            <m-card [color]="PrioritiesColors[item.priority]">
+                <h5 title>{{ item.title }}</h5>
                 <p content>{{ item.description }}</p>
-                <div footer><span>{{ item.date }}</span> <a href="#">ver mais</a></div>
+                <div footer><span>{{ item.createdAt.toLocaleDateString() }}</span> <a
+                        [routerLink]="['/complaint', item.id]">ver mais</a></div>
             </m-card>
             }
         </div>
@@ -42,15 +41,22 @@
 
     <section class="cards-section">
         <h3>Abaixo Assinados Recentes</h3>
-        <m-pagination position="left" [totalItems]="petitions.length" [pageSize]="pageSize" [currentPage]="petitionsPage"
+        <m-pagination position="left" [totalItems]="petitions().length" [currentPage]="petitionsPage()"
             (pageChange)="onPetitionsPageChange($event)">
         </m-pagination>
         <div class="cards-grid">
             @for (item of paginatedPetitions; track $index) {
-            <m-card [color]="item.color">
+            <m-card color="var(--blue-8)">
                 <h4 title>{{ item.title }}</h4>
                 <p content>{{ item.description }}</p>
-                <div footer><span>{{ item.date }}</span> <a href="#">ver mais</a></div>
+                <div footer>
+                    <m-progress-bar [value]="item.signaturesCount" [max]="item.goal" [showLabel]="false">
+                    </m-progress-bar>
+                    <div class="card-footer-info">
+                        <span>{{ item.createdAt.toLocaleDateString() }}</span>
+                        <a [routerLink]="['/petition', item.id]">ver mais</a>
+                    </div>
+                </div>
             </m-card>
             }
         </div>

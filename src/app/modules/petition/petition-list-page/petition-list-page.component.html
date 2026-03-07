@@ -13,16 +13,15 @@
 
       <div class="cards-list">
         @for (item of filteredPetitions; track item.id) {
-        <m-card [id]="'petition-' + item.id" [color]="item.color" (click)="onCardClick(item)" style="cursor: pointer;">
+        <m-card [id]="'petition-' + item.id" color="var(--blue-10)" (click)="onCardClick(item)" style="cursor: pointer;">
           <h3 title>{{ item.title }}</h3>
           <p content>{{ item.description }}</p>
           <div footer>
-              <div class="progress-container">
-                  <div class="progress-bar">
-                      <div class="progress-fill" [style.width.%]="(item.signaturesCount / item.goal) * 100"></div>
-                  </div>
-                  <span class="progress-text">{{ item.signaturesCount }} de {{ item.goal }} assinaturas</span>
-              </div>
+            <m-progress-bar 
+              [value]="item.signaturesCount" 
+              [max]="item.goal"
+              [color]="'var(--blue-8)'">
+            </m-progress-bar>
             <div class="footer-meta">
                 <span class="category">{{ item.category }}</span>
                 <span class="location-text">

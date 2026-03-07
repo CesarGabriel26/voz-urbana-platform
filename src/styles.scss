@@ -12,8 +12,23 @@
 
     --content-max-w: 1400px;
 
-    --text: black;
-    --text-inverted: white;
+    --white: #ffffff;
+    --black: #000000;
+    --primary-color: var(--blue-10);
+    --primary-contrast: var(--white);
+
+    --white-a1: rgba(255, 255, 255, 0.1);
+    --white-a2: rgba(255, 255, 255, 0.2);
+    --white-a3: rgba(255, 255, 255, 0.3);
+    --white-a4: rgba(255, 255, 255, 0.4);
+    --white-a5: rgba(255, 255, 255, 0.5);
+    --white-a6: rgba(255, 255, 255, 0.6);
+    --white-a7: rgba(255, 255, 255, 0.7);
+    --white-a8: rgba(255, 255, 255, 0.8);
+    --white-a9: rgba(255, 255, 255, 0.9);
+
+    --text: var(--black);
+    --text-inverted: var(--white);
     --nav-bg: var(--blue-10);
     --nav-text: var(--text-inverted);
     --nav-link-active: var(--text-inverted);
@@ -172,8 +187,6 @@ body {
     }
 }
 
-
-
 .btn {
     gap: .5rem;
     display: flex;
@@ -211,6 +224,7 @@ body {
     min-height: 0;
     margin: 0 auto;
     display: flex;
+    overflow-x: auto;
     flex-direction: column;
     max-width: var(--content-max-w);
 }

@@ -1,0 +1,9 @@
+<div class="progress-container">
+  <div class="progress-bar-track" [style.background-color]="backgroundColor">
+    <div class="progress-bar-fill" [style.width.%]="percentage" [style.background-color]="color"></div>
+  </div>
+  <div class="progress-label" *ngIf="showLabel">
+    <span class="current">{{ value }}</span>
+    <span class="total"> de {{ max }} {{ labelSuffix }}</span>
+  </div>
+</div>

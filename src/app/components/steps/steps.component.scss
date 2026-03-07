@@ -1,60 +1,150 @@
-.steps-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+:host {
+  display: block;
   width: 100%;
-  padding: 1rem 0;
-  gap: 0.5rem;
 }
 
-.step-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  gap: 0.5rem;
-  z-index: 1;
+.steps-container {
+  width: 100%;
+  padding: 1rem 0;
 
-  &.active {
-    .step-indicator {
-      background-color: var(--blue-10);
+  // Horizontal Layout
+  &.steps-horizontal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
 
-      span {
-        color: white;
+    .step-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      gap: 0.5rem;
+      z-index: 1;
+
+      .step-connector {
+        position: absolute;
+        top: 1.25rem;
+        left: calc(50% + 1.25rem);
+        right: calc(-50% + 1.25rem);
+        height: 2px;
+        background-color: var(--gray-4);
+        z-index: -1;
       }
-
-      box-shadow: 0 0 0 4px var(--blue-a3);
-      border-color: var(--blue-10);
     }
 
-    .step-label {
-      color: var(--blue-12);
-      font-weight: 600;
+    @media (max-width: 768px) {
+      // Switch to progress or vertical on mobile automatically
+      // But for now, let's keep it responsive as requested:
+      // "no mobile ele fique em um desses dois jeitos [vertical ou progress], independente do valor do style"
+    }
+  }
 
-      span {
-        color: white;
+  // Vertical Layout
+  &.steps-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      position: relative;
+
+      .step-indicator {
+        flex-shrink: 0;
+      }
+
+      .step-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        padding-top: 0.5rem;
+
+        .step-label {
+          font-weight: 500;
+          color: var(--text-secondary);
+          text-align: left;
+        }
+      }
+
+      .step-connector {
+        position: absolute;
+        top: 2.5rem;
+        left: 1.25rem;
+        width: 2px;
+        height: calc(100% - 1rem);
+        background-color: var(--gray-4);
+        z-index: 0;
+      }
+
+      &.active .step-label {
+        color: var(--blue-10);
+        font-weight: 700;
       }
     }
   }
 
-  &.completed {
-    .step-indicator {
-      background-color: var(--blue-10);
-      color: white;
-      border-color: var(--blue-10);
-    }
+  // Progress style
+  &.steps-progress {
+    .progress-compact {
+      background: var(--gray-2);
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--gray-4);
 
-    span {
-      color: white;
-    }
+      .progress-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
 
-    .step-label {
-      color: var(--gray-11);
-    }
+        .progress-count {
+          background: var(--blue-10);
+          color: white;
+          width: 3rem;
+          height: 3rem;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 0.9rem;
+          flex-shrink: 0;
+          box-shadow: 0 4px 10px var(--blue-a4);
+        }
 
-    .step-connector {
-      background-color: var(--blue-10);
+        .progress-labels {
+          display: flex;
+          flex-direction: column;
+
+          .current-label {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+          }
+
+          .next-label {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+          }
+        }
+      }
+
+      .progress-bar-mini {
+        height: 6px;
+        background: var(--gray-4);
+        border-radius: 3px;
+        overflow: hidden;
+
+        .progress-bar-fill {
+          height: 100%;
+          background: var(--blue-10);
+          transition: width 0.5s ease-out;
+        }
+      }
     }
   }
 }
@@ -72,31 +162,71 @@
   color: var(--gray-9);
   transition: all 0.3s ease;
   font-size: 0.9rem;
+  z-index: 1;
 
   .material-symbols-outlined {
     font-size: 1.25rem;
   }
 }
 
-.step-label {
-  font-size: 0.8rem;
-  color: var(--gray-9);
-  text-align: center;
-  transition: color 0.3s ease;
-  white-space: nowrap;
+.step-item {
+  &.active {
+    .step-indicator {
+      background-color: var(--blue-10);
+      color: white;
+      border-color: var(--blue-10);
+      box-shadow: 0 0 0 4px var(--blue-a3);
+    }
+  }
 
-  @media (max-width: 480px) {
-    display: none;
+  &.completed {
+    .step-indicator {
+      background-color: var(--blue-10);
+      color: white;
+      border-color: var(--blue-10);
+    }
+
+    .step-connector {
+      background-color: var(--blue-10) !important;
+    }
   }
 }
 
-.step-connector {
-  position: absolute;
-  top: 1.25rem;
-  left: calc(50% + 1.25rem);
-  right: calc(-50% + 1.25rem);
-  height: 2px;
-  background-color: var(--gray-4);
-  z-index: -1;
-  transition: background-color 0.3s ease;
+.step-label {
+  font-size: 0.85rem;
+  color: var(--gray-11);
+  transition: color 0.3s ease;
+}
+
+// Mobile Force Layout
+@media (max-width: 768px) {
+  .steps-container.steps-horizontal {
+    // Force horizontal to vertical on mobile
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+
+    .step-item {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+
+      .step-connector {
+        top: 2.5rem;
+        left: 1.25rem;
+        width: 2px;
+        height: calc(100% - 1rem);
+      }
+
+      &:last-child .step-connector {
+        display: none;
+      }
+
+      .step-label {
+        display: block; // Keep labels visible
+        text-align: left;
+      }
+    }
+  }
 }

@@ -10,7 +10,7 @@ export class PetitionService {
   private http = inject(HttpClient);
 
   // Mock data for initial implementation
-  private mockPetitions: any[] = Array(8).fill(null).map((_, i) => ({
+  private mockPetitions: Petition[] = Array(8).fill(null).map((_, i) => ({
     id: (i + 1).toString(),
     title: [
       'Revitalização do Parque Municipal',
@@ -37,12 +37,16 @@ export class PetitionService {
     updatedAt: new Date()
   }));
 
-  getPetitions(): Observable<any[]> {
+  getPetitions(): Observable<Petition[]> {
     return of(this.mockPetitions).pipe(delay(500));
   }
 
-  getMyPetitions(): Observable<any[]> {
+  getMyPetitions(): Observable<Petition[]> {
     return of(this.mockPetitions.slice(0, 3)).pipe(delay(500));
+  }
+
+  getPetition(id: string): Observable<Petition | undefined> {
+    return of(this.mockPetitions.find(p => p.id === id)).pipe(delay(500));
   }
 
   calculateMinimumGoal(scope: string, totalVoters: number): number {
@@ -58,8 +62,8 @@ export class PetitionService {
     }
   }
 
-  createPetition(petition: Partial<Petition>): Observable<any> {
+  createPetition(petition: Partial<Petition>): Observable<Petition> {
     // In a real app, we would add the IP/UA here or on the backend
-    return this.http.post('/api/petitions', petition);
+    return this.http.post<Petition>('/api/petitions', petition);
   }
 }

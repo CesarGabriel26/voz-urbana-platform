@@ -8,6 +8,9 @@ import { PetitionCreatePage } from './modules/petition/petition-create-page/peti
 import { ComplaintListPage } from './modules/complaint/complaint-list-page/complaint-list-page.component';
 import { ComplaintCreatePage } from './modules/complaint/complaint-create-page/complaint-create-page.component';
 import { PetitionListPage } from './modules/petition/petition-list-page/petition-list-page.component';
+import { ComplaintDetailPage } from './modules/complaint/complaint-detail-page/complaint-detail-page.component';
+import { PetitionDetailPage } from './modules/petition/petition-detail-page/petition-detail-page.component';
+import { AboutPage } from './modules/about-page/about-page.component';
 
 export const routes: Routes = [
     {
@@ -21,6 +24,11 @@ export const routes: Routes = [
                 title: 'Voz Urbana - Home',
             },
             {
+                path: 'about',
+                title: 'Voz Urbana - Sobre',
+                component: AboutPage
+            },
+            {
                 path: 'complaints',
                 title: 'Voz Urbana - Reclamações',
                 component: ComplaintListPage
@@ -30,6 +38,11 @@ export const routes: Routes = [
                 title: 'Voz Urbana - Criar Reclamação',
                 component: ComplaintCreatePage,
                 canActivate: [authGuard]
+            },
+            {
+                path: 'complaint/:id',
+                title: 'Voz Urbana - Detalhes da Reclamação',
+                component: ComplaintDetailPage
             },
             {
                 path: 'complaint/my',
@@ -48,6 +61,11 @@ export const routes: Routes = [
                 title: 'Voz Urbana - Criar Abaixo-Assinado',
                 component: PetitionCreatePage,
                 canActivate: [authGuard]
+            },
+            {
+                path: 'petition/:id',
+                title: 'Voz Urbana - Detalhes do Abaixo-Assinado',
+                component: PetitionDetailPage
             },
             {
                 path: 'petition/my',
