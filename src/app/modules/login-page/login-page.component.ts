@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormInputComponent } from '../../components/form/form-input/form-input.component';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormInputComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormInputComponent, RouterLink],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
 })

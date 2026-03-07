@@ -3,14 +3,14 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormInputComponent } from '../../components/form/form-input/form-input.component';
 import { StepsComponent } from '../../components/steps/steps.component';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormInputComponent, StepsComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormInputComponent, StepsComponent, RouterLink],
   templateUrl: './signup-page.component.html',
   styleUrl: './signup-page.component.scss'
 })
