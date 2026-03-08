@@ -39,7 +39,7 @@ export class PetitionListPage implements OnInit {
     ).subscribe(value => {
       if (value && this.filteredPetitions.length > 0) {
         const first = this.filteredPetitions[0];
-        this.map?.focusOn(first.location.latitude, first.location.longitude, 15);
+        this.map?.focusOn(first.location.lat, first.location.lng, 15);
       }
     });
   }
@@ -81,8 +81,8 @@ export class PetitionListPage implements OnInit {
   get mapPoints(): MapPoint[] {
     return this.filteredPetitions.map(p => ({
       id: p.id,
-      lat: p.location.latitude,
-      lng: p.location.longitude,
+      lat: p.location.lat,
+      lng: p.location.lng,
       title: p.title,
       color: 'var(--blue-10)',
       popupContent: `

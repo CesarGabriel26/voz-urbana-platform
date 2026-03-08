@@ -5,18 +5,18 @@
         <span class="material-symbols-outlined">arrow_back</span>
         Voltar para a lista
       </a>
-      <div class="status-badge" [class.active]="petition.status === 'active'">
-        {{ petition.status === 'active' ? 'Ativo' : 'Finalizado' }}
+      <div class="status-badge" [class.active]="petition()?.status === 'active'">
+        {{ petition()?.status === 'active' ? 'Ativo' : 'Finalizado' }}
       </div>
     </div>
 
     <div class="title-section">
-      <h1>{{ petition.title }}</h1>
+      <h1>{{ petition()?.title }}</h1>
       <div class="meta-info">
-        <span class="category-tag">{{ petition.category }}</span>
-        <span class="scope-tag">Abrangência: {{ petition.scope === 'city' ? 'Municipal' : petition.scope ===
+        <span class="category-tag">{{ petition()?.category }}</span>
+        <span class="scope-tag">Abrangência: {{ petition()?.scope === 'city' ? 'Municipal' : petition()?.scope ===
           'neighborhood' ? 'Bairro' : 'Estadual' }}</span>
-        <span class="date-tag">Criado em {{ petition.createdAt | date:'dd/MM/yyyy' }}</span>
+        <span class="date-tag">Criado em {{ petition()?.createdAt | date:'dd/MM/yyyy' }}</span>
       </div>
     </div>
   </header>
@@ -27,11 +27,11 @@
       <m-steps [steps]="steps" [currentStep]="getCurrentStep()" type="horizontal"></m-steps>
 
       <div class="progress-info-wrapper">
-        <m-progress-bar [value]="petition.signaturesCount" [max]="petition.goal" [color]="'var(--blue-10)'">
+        <m-progress-bar [value]="petition()?.signaturesCount || 0" [max]="petition()?.goal || 0" [color]="'var(--blue-10)'">
         </m-progress-bar>
       </div>
 
-      <button class="support-button" *ngIf="petition.status === 'active'">
+      <button class="support-button" *ngIf="petition()?.status === 'active'">
         <span class="material-symbols-outlined">edit_note</span>
         Assinar este Abaixo-Assinado
       </button>
@@ -40,23 +40,23 @@
     <div class="content-grid">
       <div class="info-card description-card">
         <h3>Explicação</h3>
-        <p>{{ petition.description }}</p>
+        <p>{{ petition()?.description }}</p>
       </div>
 
       <div class="info-card target-card">
         <h3>Informações de Destino</h3>
         <div class="location-details">
           <span class="material-symbols-outlined">location_on</span>
-          <p>{{ petition.location.neighborhood }} - {{ petition.location.address }}</p>
+          <p>{{ petition()?.location?.neighborhood }} - {{ petition()?.location?.address}}</p>
         </div>
         <div class="info-grid">
           <div class="info-item">
             <label>Expira em:</label>
-            <span>{{ petition.expiresAt | date:'dd/MM/yyyy' }}</span>
+            <span>{{ petition()?.expiresAt | date:'dd/MM/yyyy' }}</span>
           </div>
           <div class="info-item">
             <label>Visibilidade:</label>
-            <span>{{ petition.visibility === 'public' ? 'Pública' : 'Privada' }}</span>
+            <span>{{ petition()?.visibility === 'public' ? 'Pública' : 'Privada' }}</span>
           </div>
         </div>
       </div>

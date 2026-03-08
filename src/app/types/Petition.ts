@@ -23,8 +23,8 @@ export interface Petition {
 
     // Geolocalização precisa para o mapa de reclamações
     location: {
-        latitude: number;
-        longitude: number;
+        lat: number;
+        lng: number;
         address: string;
         neighborhood: string;
     };

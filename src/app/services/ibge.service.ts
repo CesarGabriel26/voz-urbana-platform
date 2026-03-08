@@ -33,12 +33,10 @@ export class IbgeService {
    * In a real scenario, this would call a backend or search a local JSON.
    */
   getVoterCount(cityIbgeCode: string | number): Observable<number> {
-    // Generates a deterministic "random" number based on the IBGE code for consistency
     const codeStr = cityIbgeCode.toString();
     const hash = codeStr.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const baseVoters = 10000 + (hash * 150) % 500000;
-    
-    return of(baseVoters);
+    return of(baseVoters || 0);
   }
 
   getNeighborhoods(cityId: number | string): Observable<string[]> {

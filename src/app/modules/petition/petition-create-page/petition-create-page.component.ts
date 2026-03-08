@@ -54,7 +54,7 @@ export class PetitionCreatePage implements OnInit {
 
   states = signal<SelectOption[]>([]);
   cities = signal<SelectOption[]>([]);
-  minGoal = 100;
+  minGoal = signal<number>(100);
   totalVoters = 0;
 
   form: FormGroup = this.fb.group({
@@ -138,11 +138,11 @@ export class PetitionCreatePage implements OnInit {
 
   updateMinimumGoal() {
     const scope = this.step1.get('scope')?.value;
-    this.minGoal = this.petitionService.calculateMinimumGoal(scope, this.totalVoters);
+    this.minGoal.set(this.petitionService.calculateMinimumGoal(scope, this.totalVoters));
 
     const goalControl = this.step1.get('goal');
-    if (goalControl && goalControl.value < this.minGoal) {
-      goalControl.setValue(this.minGoal);
+    if (goalControl && goalControl.value < this.minGoal()) {
+      goalControl.setValue(this.minGoal());
     }
   }
 
@@ -260,8 +260,8 @@ export class PetitionCreatePage implements OnInit {
       cityIbgeCode: formVal.step2.cityIbgeCode,
       visibility: formVal.step3.visibility,
       location: {
-        latitude: formVal.step2.latitude,
-        longitude: formVal.step2.longitude,
+        lat: formVal.step2.latitude,
+        lng: formVal.step2.longitude,
         address: formVal.step2.address,
         neighborhood: formVal.step2.neighborhood
       },
@@ -271,12 +271,15 @@ export class PetitionCreatePage implements OnInit {
       updatedAt: new Date()
     };
 
-    console.log('Submitting petition:', petitionData);
-
-    setTimeout(() => {
-      this.isSubmitting = false;
-      this.router.navigate(['/petitions']);
-    }, 1500);
+    this.petitionService.createPetition(petitionData).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.router.navigate(['/petitions']);
+      },
+      error: () => {
+        this.isSubmitting = false;
+      }
+    });
   }
 
   get mapPoints(): MapPoint[] {

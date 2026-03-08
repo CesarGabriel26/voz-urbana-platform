@@ -58,7 +58,7 @@ export class AuthService {
     return data ? (JSON.parse(data) as AuthResponse).user : null;
   }
 
-  private getTokenFromStorage(): string | null {
+  getTokenFromStorage(): string | null {
     const data = localStorage.getItem(this.STORAGE_KEY);
     return data ? (JSON.parse(data) as AuthResponse).accessToken : null;
   }
