@@ -68,7 +68,6 @@ export class AuthService {
     if (data) {
       return true
     } else {
-      this.logout()
       return false
     }
   }
