@@ -33,7 +33,12 @@ export class GeolocationService {
       if (!navigator.geolocation) {
         reject(new Error('Geolocation not supported'));
       }
-      navigator.geolocation.getCurrentPosition(resolve, reject);
+      const options = {
+        enableHighAccuracy: true, // Força o uso de métodos mais precisos
+        timeout: 5000,            // Tempo máximo de espera
+        maximumAge: 0             // Não aceita localização em cache
+      };
+      navigator.geolocation.getCurrentPosition(resolve, reject, options);
     });
   }
 

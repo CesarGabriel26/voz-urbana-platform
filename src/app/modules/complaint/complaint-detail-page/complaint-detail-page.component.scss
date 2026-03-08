@@ -4,6 +4,15 @@
   margin: 0 auto;
   animation: fadeIn 0.5s ease-out;
 
+  .badges {
+    gap: .5rem;
+    display: flex;
+  }
+
+  .priority-badge {
+    background-color: #0A62AC;
+  }
+
   .detail-header {
     margin-bottom: 2rem;
 
@@ -123,6 +132,27 @@
             span {
               color: var(--primary-color);
             }
+          }
+        }
+        
+        &.voters {
+          display: flex;
+          flex-direction: column;
+
+          .details{
+            flex: 1;
+            gap: .5rem;
+            display: flex;
+            font-size: 2rem;
+            font-weight: bold;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .actions{
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
         }
 

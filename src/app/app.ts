@@ -12,5 +12,4 @@ import { ModernNotificationService } from './components/notification/notificatio
 export class App {
   protected readonly title = signal('voz-urbana-web');
 
-
 }

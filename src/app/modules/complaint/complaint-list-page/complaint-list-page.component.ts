@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { MapComponent, MapPoint } from '../../../components/map/map';
@@ -13,7 +13,7 @@ import { PrioritiesColors } from '../../../utils/consts';
 @Component({
   selector: 'app-complaint-list-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, MapComponent, Card, FormInputComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, MapComponent, Card, FormInputComponent, DatePipe],
   templateUrl: './complaint-list-page.component.html',
   styleUrl: './complaint-list-page.component.scss'
 })
@@ -89,11 +89,11 @@ export class ComplaintListPage implements OnInit {
       color: this.PrioritiesColors[c.priority],
       popupContent: `
         <div style="font-family: 'Raleway', sans-serif;">
-          <strong style="color: var(--blue-10); font-size: 1.1rem;">${c.title}</strong>
-          <p style="margin: 8px 0; font-size: 0.9rem; color: var(--gray-11);">${c.description.substring(0, 100)}...</p>
+          <span style="color: var(--blue-10); font-size: 1.1rem; line-clamp: 1; word-break: break-all; -webkit-box-orient: vertical; -webkit-line-clamp: 1;">${c.title}</strong>
+          <p style="margin: 8px 0; font-size: 0.9rem; color: var(--gray-11); word-break: break-all">${c.description.substring(0, 100)}...</p>
           <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--gray-5); padding-top: 8px;">
             <span style="font-size: 0.8rem; font-weight: 600; color: ${this.PrioritiesColors[c.priority]};">${c.category}</span>
-            <span style="font-size: 0.8rem; color: var(--gray-9);">${c.createdAt.toLocaleDateString()}</span>
+            <span style="font-size: 0.8rem; color: var(--gray-9);">${new Date(c.createdAt).toLocaleDateString()}</span>
           </div>
         </div>
       `

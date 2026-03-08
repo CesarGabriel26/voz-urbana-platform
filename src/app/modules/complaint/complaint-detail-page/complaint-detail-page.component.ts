@@ -5,6 +5,7 @@ import { Complaint } from '../../../types/Complaint';
 import { StepsComponent } from '../../../components/steps/steps.component';
 import { PrioritiesColors } from '../../../utils/consts';
 import { ComplaintService } from '../../../services/complaint.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-complaint-detail-page',
@@ -25,7 +26,8 @@ export class ComplaintDetailPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private complaintService: ComplaintService
+    private complaintService: ComplaintService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -43,5 +45,10 @@ export class ComplaintDetailPage implements OnInit {
 
   getPriorityColor(): string {
     return PrioritiesColors[this.complaint()?.priority || 0];
+  }
+
+
+  get userIsOwner() {
+    return this.complaint()?.createdBy === this.authService.getUserFromStorage()?.id
   }
 }

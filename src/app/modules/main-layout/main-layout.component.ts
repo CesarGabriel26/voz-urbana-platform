@@ -46,7 +46,7 @@ export class MainLayoutComponent {
         },
         {
           label: 'Minhas Reclamações',
-          link: '/complaint/my',
+          link: 'mycomplaints',
           isVisible: () => this.authService.isAuthenticated()
         },
         {

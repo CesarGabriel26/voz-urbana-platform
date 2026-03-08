@@ -45,7 +45,7 @@ export const routes: Routes = [
                 component: ComplaintDetailPage
             },
             {
-                path: 'complaint/my',
+                path: 'mycomplaints',
                 title: 'Voz Urbana - Minhas Reclamações',
                 component: ComplaintListPage,
                 canActivate: [authGuard],

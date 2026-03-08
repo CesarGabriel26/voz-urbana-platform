@@ -1,17 +1,17 @@
 <div class="toast" [class]="toast.type">
-
-    <span>{{toast.message}}</span>
-
-    <div class="actions">
-        @if (toast.action) {
-        <button (click)="toast.action.callback()">
-            {{toast.action.label}}
-        </button>
-        }
-
+    <div class="header">
+        <span class="title">{{toast.title || toast.type}}</span>
         <button (click)="close.emit()">
             <span class="material-symbols-outlined">close</span>
         </button>
     </div>
+    <span class="message">{{toast.message}}</span>
 
+    @if (toast.action) {
+    <div class="actions">
+        <button (click)="toast.action.callback()">
+            {{toast.action.label}}
+        </button>
+    </div>
+    }
 </div>

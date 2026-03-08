@@ -18,7 +18,7 @@
           <p content>{{ item.description }}</p>
           <div footer>
             <span class="category">{{ item.category }}</span>
-            <span class="date">{{ item.createdAt.toLocaleDateString() }}</span>
+            <span class="date">{{ item.createdAt | date: 'dd/MM/yyyy' }}</span>
             <a class="more-link" [routerLink]="['/complaint', item.id]">ver detalhes</a>
           </div>
         </m-card>

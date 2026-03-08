@@ -55,6 +55,7 @@
 
       .step-indicator {
         flex-shrink: 0;
+
       }
 
       .step-content {
@@ -173,17 +174,23 @@
   &.active {
     .step-indicator {
       background-color: var(--blue-10);
-      color: white;
       border-color: var(--blue-10);
       box-shadow: 0 0 0 4px var(--blue-a3);
+
+      span {
+        color: var(--blue-contrast);
+      }
     }
   }
 
   &.completed {
     .step-indicator {
       background-color: var(--blue-10);
-      color: white;
       border-color: var(--blue-10);
+
+      span {
+        color: var(--blue-contrast);
+      }
     }
 
     .step-connector {

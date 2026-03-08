@@ -6,8 +6,16 @@
         <span class="material-symbols-outlined">arrow_back</span>
         Voltar para a lista
       </a>
-      <div class="priority-badge" [style.background-color]="getPriorityColor()">
-        Prioridade {{ complaint()?.priority }}
+
+      <div class="badges">
+        <div class="priority-badge" [style.background-color]="getPriorityColor()">
+          Prioridade {{ complaint()?.priority }}
+        </div>
+        @if (userIsOwner) {
+        <div class="priority-badge">
+          Criado por você
+        </div>
+        }
       </div>
     </div>
 
@@ -23,7 +31,7 @@
   <main class="detail-content">
     <section class="status-section">
       <h3>Situação da Reclamação</h3>
-      <m-steps [steps]="steps" [currentStep]="getCurrentStep()" type="vertical"></m-steps>
+      <m-steps [steps]="steps" [currentStep]="getCurrentStep()" type="horizontal"></m-steps>
     </section>
 
     <div class="content-grid">
@@ -56,6 +64,19 @@
             <label>Resolvido em:</label>
             <span>{{ complaint()?.resolvedAt | date:'dd/MM/yyyy' }}</span>
           </div>
+        </div>
+      </div>
+
+      <div class="info-card voters">
+        <h3>Confirmado por</h3>
+        <div class="details">
+          <span>{{complaint()?.vote_count || 0}}</span>
+          <span>Pessoas</span>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" [disabled]="userIsOwner">
+            Confirmar que o problema existe
+          </button>
         </div>
       </div>
     </div>

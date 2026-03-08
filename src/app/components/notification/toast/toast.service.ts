@@ -16,7 +16,7 @@ export class ToastService {
         if (notification.duration !== 0) {
             setTimeout(() => {
                 this.remove(notification.id);
-            }, notification.duration ?? 4000);
+            }, notification.duration ?? 6000);
         }
     }
 
