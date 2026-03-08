@@ -1,6 +1,4 @@
-import { Categories } from "../utils/consts";
 
-type Category = typeof Categories[number];
 type Visibility = "public" | "anonymous" | "private";
 
 export interface Complaint {
@@ -9,7 +7,8 @@ export interface Complaint {
     title: string
     description: string
 
-    category: Category
+    category: string
+    category_name?: string
 
     priority: number
     visibility: Visibility

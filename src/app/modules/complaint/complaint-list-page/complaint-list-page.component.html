@@ -13,11 +13,12 @@
 
       <div class="cards-list">
         @for (item of filteredComplaints; track item.id) {
-        <m-card [id]="'complaint-' + item.id" [color]="PrioritiesColors[item.priority]" (click)="onCardClick(item)" style="cursor: pointer;">
+        <m-card [id]="'complaint-' + item.id" [color]="getPriorityColor(item.priority)" (click)="onCardClick(item)"
+          style="cursor: pointer;">
           <h3 title>{{ item.title }}</h3>
           <p content>{{ item.description }}</p>
           <div footer>
-            <span class="category">{{ item.category }}</span>
+            <span class="category">{{ item.category_name }}</span>
             <span class="date">{{ item.createdAt | date: 'dd/MM/yyyy' }}</span>
             <a class="more-link" [routerLink]="['/complaint', item.id]">ver detalhes</a>
           </div>
@@ -32,15 +33,12 @@
 
     <section class="map-section">
       <div class="search-floating-container">
-        <m-form-input 
-          [formControl]="searchControl" 
-          [control]="searchControl" 
-          placeholder="Buscar reclamações por título, descrição ou categoria..."
-          icon="search">
+        <m-form-input [formControl]="searchControl" [control]="searchControl"
+          placeholder="Buscar reclamações por título, descrição ou categoria..." icon="search">
         </m-form-input>
       </div>
       <div class="map-wrapper">
-        <m-map [points]="mapPoints" [zoom]="14" (pointClick)="onMapPointClick($event)" ></m-map>
+        <m-map [points]="mapPoints" [zoom]="14" (pointClick)="onMapPointClick($event)"></m-map>
       </div>
     </section>
   </main>

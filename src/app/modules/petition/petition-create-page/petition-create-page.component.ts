@@ -9,7 +9,8 @@ import { MapComponent, MapPoint } from '../../../components/map/map';
 import { GeolocationService } from '../../../services/geolocation.service';
 import { PetitionService } from '../../../services/petition.service';
 import { IbgeService } from '../../../services/ibge.service';
-import { PetitionsCategories } from '../../../utils/consts';
+import { CategoryService } from '../../../services/category.service';
+import { Category } from '../../../types/category';
 
 @Component({
   selector: 'app-petition-create-page',
@@ -32,13 +33,14 @@ export class PetitionCreatePage implements OnInit {
   private geoService = inject(GeolocationService);
   private petitionService = inject(PetitionService);
   private ibgeService = inject(IbgeService);
+  private categoryService = inject(CategoryService);
 
   @ViewChild(MapComponent) mapComponent!: MapComponent;
 
   currentStep = 0;
   steps = ['Localização', 'Informações', 'Revisão'];
 
-  categories: SelectOption[] = PetitionsCategories.map(c => ({ label: c, value: c }));
+  categories = signal<SelectOption[]>([]);
 
   scopeOptions: SelectOption[] = [
     { label: 'Causa Local (Bairro)', value: 'neighborhood', icon: 'home' },
@@ -90,6 +92,10 @@ export class PetitionCreatePage implements OnInit {
 
   ngOnInit() {
     this.loadStates();
+
+    this.categoryService.getCategories({active: true, type: 'petition'}).subscribe((categories: Category[]) => {
+      this.categories.set(categories.map((c: Category) => ({ label: c.name, value: c.id })));
+    });
 
     // Watch scope and city changes to update minGoal
     this.step1.get('scope')?.valueChanges.subscribe(() => this.updateMinimumGoal());

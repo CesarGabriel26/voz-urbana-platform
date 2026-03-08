@@ -71,7 +71,7 @@
             </m-form-input>
           </div>
 
-          <m-form-select label="Categoria" [options]="categories" [control]="asFormControl(step1.get('category'))"
+          <m-form-select label="Categoria" [options]="categories()" [control]="asFormControl(step1.get('category'))"
             placeholder="Selecione o tema da petição" icon="category">
           </m-form-select>
 

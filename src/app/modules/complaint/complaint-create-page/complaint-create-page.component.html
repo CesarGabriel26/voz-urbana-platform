@@ -23,7 +23,7 @@
 
           <m-form-select 
             label="Categoria" 
-            [options]="categories"
+            [options]="categories()"
             [control]="asFormControl(step1.get('category'))"
             placeholder="Selecione o tipo de problema"
             icon="category">

@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule, AbstractControl, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -7,11 +7,10 @@ import { FormInputComponent } from '../../../components/form/form-input/form-inp
 import { FormSelectComponent, SelectOption } from '../../../components/form/form-select/form-select.component';
 import { MapComponent, MapPoint } from '../../../components/map/map';
 import { GeolocationService } from '../../../services/geolocation.service';
-import { Categories } from '../../../utils/consts';
-import { Complaint } from '../../../types/Complaint';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/user.model';
 import { ComplaintService } from '../../../services/complaint.service';
+import { CategoryService } from '../../../services/category.service';
 
 @Component({
   selector: 'app-complaint-create-page',
@@ -28,7 +27,7 @@ import { ComplaintService } from '../../../services/complaint.service';
   templateUrl: './complaint-create-page.component.html',
   styleUrl: './complaint-create-page.component.scss'
 })
-export class ComplaintCreatePage {
+export class ComplaintCreatePage implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private geoService = inject(GeolocationService);
@@ -37,13 +36,14 @@ export class ComplaintCreatePage {
 
   constructor(
     private authService: AuthService,
-    private complaintService: ComplaintService
+    private complaintService: ComplaintService,
+    private categoryService: CategoryService
   ) { }
 
   currentStep = 0;
   steps = ['Informações', 'Localização', 'Revisão'];
 
-  categories: SelectOption[] = Categories.map(c => ({ label: c, value: c }));
+  categories = signal<SelectOption[]>([]);
 
   visibilityOptions: SelectOption[] = [
     { label: 'Público', value: 'public', icon: 'public' },
@@ -75,6 +75,12 @@ export class ComplaintCreatePage {
   get step1() { return this.form.get('step1') as FormGroup; }
   get step2() { return this.form.get('step2') as FormGroup; }
   get step3() { return this.form.get('step3') as FormGroup; }
+
+  ngOnInit(): void {
+    this.categoryService.getCategories({active: true, type: 'report'}).subscribe(categories => {
+      this.categories.set(categories.map(c => ({ label: c.name, value: c.id })));
+    });
+  }
 
   asFormControl(control: AbstractControl | null): FormControl {
     return control as FormControl;

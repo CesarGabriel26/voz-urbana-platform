@@ -91,7 +91,7 @@ export class PetitionListPage implements OnInit {
             <p style="margin: 8px 0; font-size: 0.9rem; color: var(--gray-11);">${p.description.substring(0, 100)}...</p>
             <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--gray-5); padding-top: 8px;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 0.8rem; font-weight: 600; color: var(--blue-10);">${p.category}</span>
+                    <span style="font-size: 0.8rem; font-weight: 600; color: var(--blue-10);">${p.category_name}</span>
                     <span style="font-size: 0.8rem; color: var(--gray-9);">${p.location.neighborhood}</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">

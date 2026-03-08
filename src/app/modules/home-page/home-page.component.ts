@@ -8,9 +8,9 @@ import { Pagination } from '../../components/pagination/pagination';
 import { ProgressBarComponent } from '../../components/progress-bar/progress-bar.component';
 import { Petition } from '../../types/Petition';
 import { Complaint } from '../../types/Complaint';
-import { PrioritiesColors } from '../../utils/consts';
 import { ComplaintService } from '../../services/complaint.service';
 import { PetitionService } from '../../services/petition.service';
+import { getPriorityColor } from '../../utils/priority';
 
 @Component({
   selector: 'app-home-page.component',
@@ -20,7 +20,7 @@ import { PetitionService } from '../../services/petition.service';
   styleUrl: './home-page.component.scss',
 })
 export class HomePage {
-  PrioritiesColors = PrioritiesColors;
+  getPriorityColor = getPriorityColor;
 
   pageSize = 4;
   complaintsPage = signal<number>(1);

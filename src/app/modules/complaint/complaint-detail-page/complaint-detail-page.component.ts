@@ -3,9 +3,9 @@ import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Complaint } from '../../../types/Complaint';
 import { StepsComponent } from '../../../components/steps/steps.component';
-import { PrioritiesColors } from '../../../utils/consts';
 import { ComplaintService } from '../../../services/complaint.service';
 import { AuthService } from '../../../services/auth.service';
+import { getPriorityColor } from '../../../utils/priority';
 
 @Component({
   selector: 'app-complaint-detail-page',
@@ -44,7 +44,7 @@ export class ComplaintDetailPage implements OnInit {
   }
 
   getPriorityColor(): string {
-    return PrioritiesColors[this.complaint()?.priority || 0];
+    return getPriorityColor(this.complaint()?.priority || 0);
   }
 
 

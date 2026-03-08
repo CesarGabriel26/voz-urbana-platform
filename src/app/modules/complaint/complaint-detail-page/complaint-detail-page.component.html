@@ -22,7 +22,7 @@
     <div class="title-section">
       <h1>{{ complaint()?.title }}</h1>
       <div class="meta-info">
-        <span class="category-tag">{{ complaint()?.category }}</span>
+        <span class="category-tag">{{ complaint()?.category_name }}</span>
         <span class="date-tag">Criado em {{ complaint()?.createdAt | date:'dd/MM/yyyy' }}</span>
       </div>
     </div>
@@ -74,7 +74,8 @@
           <span>Pessoas</span>
         </div>
         <div class="actions">
-          <button class="btn btn-primary" [disabled]="userIsOwner || !userLogged" [title]="!userLogged? 'Faça login para ou registre-se apoiar': ''">
+          <button class="btn btn-primary" [disabled]="userIsOwner || !userLogged"
+            [title]="!userLogged? 'Faça login para apoiar': ''">
             Confirmar que o problema existe
           </button>
         </div>

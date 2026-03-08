@@ -29,7 +29,7 @@
         </m-pagination>
         <div class="cards-grid">
             @for (item of paginatedComplaints; track $index) {
-            <m-card [color]="PrioritiesColors[item.priority]">
+            <m-card [color]="getPriorityColor(item.priority)">
                 <h5 title>{{ item.title }}</h5>
                 <p content>{{ item.description }}</p>
                 <div footer><span>{{ item.createdAt | date: 'dd/MM/yyyy' }}</span> <a

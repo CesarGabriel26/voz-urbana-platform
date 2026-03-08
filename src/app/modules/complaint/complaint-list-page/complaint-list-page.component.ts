@@ -8,8 +8,7 @@ import { FormInputComponent } from '../../../components/form/form-input/form-inp
 import { ComplaintService } from '../../../services/complaint.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Complaint } from '../../../types/Complaint';
-import { PrioritiesColors } from '../../../utils/consts';
-
+import { getPriorityColor } from '../../../utils/priority';
 @Component({
   selector: 'app-complaint-list-page',
   standalone: true,
@@ -18,8 +17,7 @@ import { PrioritiesColors } from '../../../utils/consts';
   styleUrl: './complaint-list-page.component.scss'
 })
 export class ComplaintListPage implements OnInit {
-  PrioritiesColors = PrioritiesColors;
-
+  getPriorityColor = getPriorityColor;
   @ViewChild(MapComponent) map!: MapComponent;
 
   private complaintService = inject(ComplaintService);
@@ -86,13 +84,13 @@ export class ComplaintListPage implements OnInit {
       lat: c.lat,
       lng: c.lng,
       title: c.title,
-      color: this.PrioritiesColors[c.priority],
+      color: getPriorityColor(c.priority),
       popupContent: `
         <div style="font-family: 'Raleway', sans-serif;">
           <span style="color: var(--blue-10); font-size: 1.1rem; line-clamp: 1; word-break: break-all; -webkit-box-orient: vertical; -webkit-line-clamp: 1;">${c.title}</strong>
           <p style="margin: 8px 0; font-size: 0.9rem; color: var(--gray-11); word-break: break-all">${c.description.substring(0, 100)}...</p>
           <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--gray-5); padding-top: 8px;">
-            <span style="font-size: 0.8rem; font-weight: 600; color: ${this.PrioritiesColors[c.priority]};">${c.category}</span>
+            <span style="font-size: 0.8rem; font-weight: 600; color: ${getPriorityColor(c.priority)};">${c.category_name}</span>
             <span style="font-size: 0.8rem; color: var(--gray-9);">${new Date(c.createdAt).toLocaleDateString()}</span>
           </div>
         </div>

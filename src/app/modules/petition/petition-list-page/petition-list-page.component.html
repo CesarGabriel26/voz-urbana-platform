@@ -13,22 +13,20 @@
 
       <div class="cards-list">
         @for (item of filteredPetitions; track item.id) {
-        <m-card [id]="'petition-' + item.id" color="var(--blue-10)" (click)="onCardClick(item)" style="cursor: pointer;">
+        <m-card [id]="'petition-' + item.id" color="var(--blue-10)" (click)="onCardClick(item)"
+          style="cursor: pointer;">
           <h3 title>{{ item.title }}</h3>
           <p content>{{ item.description }}</p>
           <div footer>
-            <m-progress-bar 
-              [value]="item.signaturesCount" 
-              [max]="item.goal"
-              [color]="'var(--blue-8)'">
+            <m-progress-bar [value]="item.signaturesCount" [max]="item.goal" [color]="'var(--blue-8)'">
             </m-progress-bar>
             <div class="footer-meta">
-                <span class="category">{{ item.category }}</span>
-                <span class="location-text">
-                  <span class="material-symbols-outlined">location_on</span>
-                  {{ item.location.neighborhood }}
-                </span>
-                <a class="more-link" [routerLink]="['/petition', item.id]">ver e apoiar</a>
+              <span class="category">{{ item.category_name }}</span>
+              <span class="location-text">
+                <span class="material-symbols-outlined">location_on</span>
+                {{ item.location.neighborhood }}
+              </span>
+              <a class="more-link" [routerLink]="['/petition', item.id]">ver e apoiar</a>
             </div>
           </div>
         </m-card>
@@ -42,11 +40,8 @@
 
     <section class="map-section">
       <div class="search-floating-container">
-        <m-form-input 
-          [formControl]="searchControl" 
-          [control]="searchControl" 
-          placeholder="Buscar petições por título, descrição ou categoria..."
-          icon="search">
+        <m-form-input [formControl]="searchControl" [control]="searchControl"
+          placeholder="Buscar petições por título, descrição ou categoria..." icon="search">
         </m-form-input>
       </div>
       <div class="map-wrapper">

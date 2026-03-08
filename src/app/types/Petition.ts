@@ -1,6 +1,3 @@
-import { PetitionsCategories } from "../utils/consts";
-
-type Category = typeof PetitionsCategories[number];
 type Visibility = "public" | "anonymous" | "private";
 
 // Adicione campos de identificação civil para validade jurídica
@@ -8,7 +5,8 @@ export interface Petition {
     id: string;
     title: string;
     description: string;
-    category: Category;
+    category: string;
+    category_name?: string;
 
     // Metas dinâmicas
     goal: number;
