@@ -17,6 +17,7 @@ export interface MapPoint {
   selector: 'm-map',
   standalone: true,
   templateUrl: './map.html',
+  styleUrl: './map.scss'
 })
 export class MapComponent implements AfterViewInit, OnChanges {
   @Input() points: MapPoint[] = [];
