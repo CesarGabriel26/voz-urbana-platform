@@ -1,0 +1,17 @@
+<div class="toast" [class]="toast.type">
+
+    <span>{{toast.message}}</span>
+
+    <div class="actions">
+        @if (toast.action) {
+        <button (click)="toast.action.callback()">
+            {{toast.action.label}}
+        </button>
+        }
+
+        <button (click)="close.emit()">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+    </div>
+
+</div>

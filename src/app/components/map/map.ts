@@ -11,7 +11,6 @@ export interface MapPoint {
   popupContent?: string;
   color?: string; // Hex or HSL for the marker
   iconHtml?: string; // Optional custom SVG or Emoji
-  priority?: number; // Optional for default scaling/coloring
 }
 
 @Component({
@@ -126,7 +125,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   }
 
   private createIcon(point: MapPoint) {
-    const color = point.color || 'var(--blue-10, #0060ec)';
+    const color = point.color || 'var(--blue-10, #ec0000ff)';
     const innerHtml = point.iconHtml || this.getDefaultSvg();
 
     return L.divIcon({

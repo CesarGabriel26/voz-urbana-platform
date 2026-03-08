@@ -1,0 +1,5 @@
+<div class="toast-container" [ngClass]="position">
+    @for (toast of toasts$ | async; track toast.id) {
+        <m-toast [toast]="toast" (close)="remove(toast.id)" />
+    }
+</div>

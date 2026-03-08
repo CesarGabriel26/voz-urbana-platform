@@ -32,7 +32,7 @@
             <m-card [color]="PrioritiesColors[item.priority]">
                 <h5 title>{{ item.title }}</h5>
                 <p content>{{ item.description }}</p>
-                <div footer><span>{{ item.createdAt.toLocaleDateString() }}</span> <a
+                <div footer><span>{{ item.createdAt | date: 'dd/MM/yyyy' }}</span> <a
                         [routerLink]="['/complaint', item.id]">ver mais</a></div>
             </m-card>
             }
@@ -47,13 +47,13 @@
         <div class="cards-grid">
             @for (item of paginatedPetitions; track $index) {
             <m-card color="var(--blue-8)">
-                <h4 title>{{ item.title }}</h4>
+                <h5 title>{{ item.title }}</h5>
                 <p content>{{ item.description }}</p>
                 <div footer>
                     <m-progress-bar [value]="item.signaturesCount" [max]="item.goal" [showLabel]="false">
                     </m-progress-bar>
                     <div class="card-footer-info">
-                        <span>{{ item.createdAt.toLocaleDateString() }}</span>
+                        <span>{{ item.createdAt | date: 'dd/MM/yyyy' }}</span>
                         <a [routerLink]="['/petition', item.id]">ver mais</a>
                     </div>
                 </div>

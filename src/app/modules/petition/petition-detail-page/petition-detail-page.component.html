@@ -1,12 +1,19 @@
 <div class="detail-page-container" *ngIf="petition">
   <header class="detail-header">
     <div class="header-top">
-      <a routerLink="/petitions" class="back-link">
+      <a class="back-link" (click)="goback()">
         <span class="material-symbols-outlined">arrow_back</span>
-        Voltar para a lista
+        Voltar
       </a>
-      <div class="status-badge" [class.active]="petition()?.status === 'active'">
-        {{ petition()?.status === 'active' ? 'Ativo' : 'Finalizado' }}
+      <div class="badges">
+        <div class="status-badge" [class.active]="petition()?.status === 'active'">
+          {{ petition()?.status === 'active' ? 'Ativo' : 'Finalizado' }}
+        </div>
+        @if (userIsOwner) {
+          <div class="status-badge active">
+            Criado por você
+          </div>
+        }
       </div>
     </div>
 
@@ -27,11 +34,13 @@
       <m-steps [steps]="steps" [currentStep]="getCurrentStep()" type="horizontal"></m-steps>
 
       <div class="progress-info-wrapper">
-        <m-progress-bar [value]="petition()?.signaturesCount || 0" [max]="petition()?.goal || 0" [color]="'var(--blue-10)'">
+        <m-progress-bar [value]="petition()?.signaturesCount || 0" [max]="petition()?.goal || 0"
+          [color]="'var(--blue-10)'">
         </m-progress-bar>
       </div>
 
-      <button class="support-button" *ngIf="petition()?.status === 'active'">
+      <button class="btn-primary support-button" *ngIf="petition()?.status === 'active'" (click)="support()"
+        [disabled]="userIsOwner">
         <span class="material-symbols-outlined">edit_note</span>
         Assinar este Abaixo-Assinado
       </button>

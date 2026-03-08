@@ -27,7 +27,7 @@ export class MainLayoutComponent {
         },
         {
           label: 'Meus Abaixo Assinados',
-          link: '/petition/my',
+          link: '/mypetitions',
           isVisible: () => this.authService.isAuthenticated()
         },
         {

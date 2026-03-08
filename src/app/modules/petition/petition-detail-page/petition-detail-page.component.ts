@@ -5,6 +5,9 @@ import { Petition } from '../../../types/Petition';
 import { StepsComponent } from '../../../components/steps/steps.component';
 import { ProgressBarComponent } from '../../../components/progress-bar/progress-bar.component';
 import { PetitionService } from '../../../services/petition.service';
+import { NavigationService } from '../../../services/navigarion.service';
+import { ModernNotificationService } from '../../../components/notification/notification.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-petition-detail-page',
@@ -24,8 +27,11 @@ export class PetitionDetailPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private petitionService: PetitionService    
-  ) {}
+    private petitionService: PetitionService,
+    private navigationService: NavigationService,
+    private notificationService: ModernNotificationService,
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -41,7 +47,7 @@ export class PetitionDetailPage implements OnInit {
   getCurrentStep(): number {
     // If signatures >= goal, we could move to step 1
     if (this.petition() && (this.petition()?.signaturesCount || 0) >= (this.petition()?.goal || 0)) {
-       return 1;
+      return 1;
     }
     return this.statusMap[this.petition()?.status || 'active'];
   }
@@ -49,5 +55,44 @@ export class PetitionDetailPage implements OnInit {
   getProgressPercentage(): number {
     if (!this.petition) return 0;
     return Math.min(((this.petition()?.signaturesCount || 0) / (this.petition()?.goal || 0)) * 100, 100);
+  }
+
+  goback() {
+    this.navigationService.back();
+  }
+
+  support() {
+    const id = this.petition()?.id
+    if (id) {
+      this.petitionService.signPetition(id).subscribe({
+        next: (value) => {
+          this.petitionService.getPetition(value!.data.id).subscribe({
+            next: (pet) => {
+              this.petition.set(pet)
+              this.notificationService.toast.success('Assinatura realizada com sucesso')
+            }
+          })
+        }
+      })
+    }
+  }
+
+  unsupport() {
+    const id = this.petition()?.id
+    if (id) {
+      this.petitionService.unsignPetition(id).subscribe({
+        next: (value) => {
+          this.petitionService.getPetition(value!.data.id).subscribe({
+            next: (pet) => {
+              this.petition.set(pet)
+            }
+          })
+        }
+      })
+    }
+  }
+
+  get userIsOwner() {
+    return this.petition()?.createdBy === this.authService.getUserFromStorage()?.id
   }
 }

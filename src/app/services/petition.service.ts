@@ -4,6 +4,7 @@ import { Observable, of, delay, map } from 'rxjs';
 import { Petition } from '../types/Petition';
 import { config } from '../config';
 import { AuthService } from './auth.service';
+import { HttpResponse } from '../types/HttpResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,11 @@ export class PetitionService {
     private http: HttpClient,
     private authService: AuthService
   ) {
+  }
+
+  handleError(error: any) {
+    console.error(error)
+    return of(null)
   }
 
   getHeaders() {
@@ -29,11 +35,12 @@ export class PetitionService {
   }
 
   getMyPetitions(): Observable<Petition[]> {
-    return this.http.get<Petition[]>(`${config.api}/petitions/my`)
+    const headers = this.getHeaders()
+    return this.http.get<Petition[]>(`${config.api}/petitions/my`, { headers })
   }
 
   getPetition(id: string): Observable<Petition | undefined> {
-    return this.http.get<Petition>(`${config.api}/petitions/${id}`)
+    return this.http.get<Petition>(`${config.api}/petitions/petition/${id}`)
   }
 
   calculateMinimumGoal(scope: string, totalVoters: number): number {
@@ -53,5 +60,21 @@ export class PetitionService {
     const headers = this.getHeaders()
 
     return this.http.post<Petition>(`${config.api}/petitions`, petition, { headers })
+  }
+
+  signPetition(id: string): Observable<HttpResponse<Petition>> {
+    const headers = this.getHeaders()
+
+    const body = {
+      fullName: this.authService.getUserFromStorage()?.name,
+      cpfHash: this.authService.getUserFromStorage()?.cpfHash,
+    }
+
+    return this.http.post<HttpResponse<Petition>>(`${config.api}/petitions/${id}/sign`, body, { headers })
+  }
+
+  unsignPetition(id: string): Observable<HttpResponse<Petition>> {
+    const headers = this.getHeaders()
+    return this.http.post<HttpResponse<Petition>>(`${config.api}/petitions/${id}/unsign`, {}, { headers })
   }
 }

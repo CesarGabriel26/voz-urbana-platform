@@ -4,6 +4,7 @@ export interface User {
   email: string;
   phoneNumber?: string;
   role?: string;
+  cpfHash?: string;
   createdAt: Date;
   updatedAt: Date;
 }

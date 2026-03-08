@@ -213,6 +213,12 @@ body {
     }
 }
 
+.btn-primary[disabled] {
+    opacity: .5;
+    transform: none !important;
+    cursor: not-allowed !important;
+}
+
 .btn-ghost {
     border: 1px solid var(--blue-1);
     border-radius: 6px;

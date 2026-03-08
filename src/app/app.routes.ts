@@ -68,10 +68,9 @@ export const routes: Routes = [
                 component: PetitionDetailPage
             },
             {
-                path: 'petition/my',
+                path: 'mypetitions',
                 title: 'Voz Urbana - Meus Abaixo-Assinados',
                 component: PetitionListPage,
-                canActivate: [authGuard],
                 data: { isMyPetitions: true }
             }
         ]

@@ -85,7 +85,7 @@
             </m-form-input>
             <div class="goal-info" *ngIf="step1.get('scope')?.value !== 'neighborhood'">
               <span class="material-symbols-outlined">info</span>
-              Meta mínima sugerida de <strong>{{ minGoal }}</strong> com base em <strong>{{ totalVoters }}</strong>
+              Meta mínima sugerida de <strong>{{ minGoal() }}</strong> com base em <strong>{{ totalVoters }}</strong>
               eleitores.
             </div>
           </div>

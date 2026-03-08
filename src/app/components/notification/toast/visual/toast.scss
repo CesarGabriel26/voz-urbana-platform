@@ -1,0 +1,47 @@
+.toast {
+    --shadow-2: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 8px -1px rgba(0, 0, 0, 0.1);
+    --surface-0: #ffffff;
+
+    gap: .5rem;
+    display: flex;
+    padding: .5rem;
+    min-width: 20rem;
+    align-items: center;
+    border-radius: .5rem;
+    box-shadow: var(--shadow-2);
+    background-color: var(--surface-0);
+
+    span {
+        flex: 1;
+        color: rgb(255, 255, 255);
+    }
+
+    button {
+        border: none;
+        display: flex;
+        cursor: pointer;
+        background: none;
+    }
+
+    .actions {
+        gap: .5rem;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.success {
+    --surface-0: #10b981;
+}
+
+.error {
+    --surface-0: #ef4444;
+}
+
+.warning {
+    --surface-0: #f59e0b;
+}
+
+.info {
+    --surface-0: #3b82f6;
+}
