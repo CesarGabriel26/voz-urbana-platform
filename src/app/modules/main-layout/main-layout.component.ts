@@ -59,7 +59,15 @@ export class MainLayoutComponent {
   ];
 
   authItems: NavItem[] = [
-    { label: 'Login', link: '/login' },
-    { label: 'Register', link: '/signup' },
+    {
+      label: 'Login',
+      link: '/login',
+      isVisible: () => !this.authService.isAuthenticated()
+    },
+    {
+      label: 'Register',
+      link: '/signup',
+      isVisible: () => !this.authService.isAuthenticated()
+    }
   ];
 }

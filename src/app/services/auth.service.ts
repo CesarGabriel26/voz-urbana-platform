@@ -1,5 +1,8 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { User, AuthResponse, LoginRequest } from '../models/user.model';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { config } from '../config';
+import { catchError, map, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,25 +19,26 @@ export class AuthService {
   token = this._token.asReadonly();
   isAuthenticated = computed(() => !!this._token());
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
-  login(request: LoginRequest): void {
-    // In a real app, this would be an Observable call to an API
-    // For now, we mock the response
-    const mockResponse: AuthResponse = {
-      token: 'mock-token-' + Math.random().toString(36).substring(7),
-      user: {
-        id: '1',
-        name: 'Usuário Demonstrativo',
-        email: 'user@example.com',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    };
+  private handleHttpError<T>(fallback: T, operation: string, entityId?: string | number) {
+    return (error: HttpErrorResponse): Observable<T> => {
+      console.error(
+        `Erro ao ${operation} ${entityId ? `entidade ${entityId}` : 'entidade'}:`,
+        error.message || error.statusText
+      );
+      return of(fallback);
+    }
+  }
 
-    this.saveToStorage(mockResponse);
-    this._user.set(mockResponse.user);
-    this._token.set(mockResponse.token);
+  login(request: LoginRequest): Observable<AuthResponse | null> {
+    const url = `${config.api}/users/login`;
+
+    return this.http.post<AuthResponse>(url, request).pipe(
+      catchError(this.handleHttpError<AuthResponse | null>(null, 'login'))
+    );
   }
 
   logout(): void {
@@ -43,8 +47,10 @@ export class AuthService {
     this._token.set(null);
   }
 
-  private saveToStorage(auth: AuthResponse): void {
+  saveToStorage(auth: AuthResponse): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(auth));
+    this._user.set(auth.user);
+    this._token.set(auth.accessToken);
   }
 
   private getUserFromStorage(): User | null {
@@ -54,7 +60,7 @@ export class AuthService {
 
   private getTokenFromStorage(): string | null {
     const data = localStorage.getItem(this.STORAGE_KEY);
-    return data ? (JSON.parse(data) as AuthResponse).token : null;
+    return data ? (JSON.parse(data) as AuthResponse).accessToken : null;
   }
 
   private clearStorage(): void {

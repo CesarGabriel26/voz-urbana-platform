@@ -3,14 +3,14 @@ export interface User {
   name: string;
   email: string;
   phoneNumber?: string;
-  avatarUrl?: string;
   role?: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface AuthResponse {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
   user: User;
 }
 

@@ -24,8 +24,17 @@ export class LoginPage {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value);
-      this.router.navigate(['/']);
+      this.authService.login(this.loginForm.value).subscribe({
+        next: (response) => {
+          if (response?.accessToken) {
+            this.router.navigate(['/']);
+            this.authService.saveToStorage(response);
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
     } else {
       this.loginForm.markAllAsTouched();
     }
