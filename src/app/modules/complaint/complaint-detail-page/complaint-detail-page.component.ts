@@ -47,6 +47,20 @@ export class ComplaintDetailPage implements OnInit {
     return getPriorityColor(this.complaint()?.priority || 0);
   }
 
+  voteComplaint() {
+    const id = this.complaint()?.id
+    if (id) {
+      this.complaintService.voteComplaint(id).subscribe({
+        next: (value) => {
+          this.complaintService.getComplaint(id).subscribe({
+            next: (comp) => {
+              this.complaint.set(comp)
+            }
+          })
+        }
+      })
+    }
+  }
 
   get userIsOwner() {
     return this.complaint()?.createdBy === this.authService.getUserFromStorage()?.id

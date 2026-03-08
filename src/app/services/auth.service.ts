@@ -66,9 +66,9 @@ export class AuthService {
   userLogged(): boolean {
     const data = localStorage.getItem(this.STORAGE_KEY);
     if (data) {
-      this.logout()
       return true
     } else {
+      this.logout()
       return false
     }
   }

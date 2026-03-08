@@ -70,12 +70,12 @@
       <div class="info-card voters">
         <h3>Confirmado por</h3>
         <div class="details">
-          <span>{{complaint()?.vote_count || 0}}</span>
+          <span>{{complaint()?.votes || 0}}</span>
           <span>Pessoas</span>
         </div>
         <div class="actions">
           <button class="btn btn-primary" [disabled]="userIsOwner || !userLogged"
-            [title]="!userLogged? 'Faça login para apoiar': ''">
+            [title]="!userLogged? 'Faça login para apoiar': ''" (click)="voteComplaint()">
             Confirmar que o problema existe
           </button>
         </div>
