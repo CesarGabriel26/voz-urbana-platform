@@ -95,4 +95,8 @@ export class PetitionDetailPage implements OnInit {
   get userIsOwner() {
     return this.petition()?.createdBy === this.authService.getUserFromStorage()?.id
   }
+
+  get userLogged() {
+    return this.authService.userLogged()
+  }
 }

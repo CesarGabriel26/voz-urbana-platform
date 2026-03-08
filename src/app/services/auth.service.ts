@@ -63,6 +63,16 @@ export class AuthService {
     return data ? (JSON.parse(data) as AuthResponse).accessToken : null;
   }
 
+  userLogged(): boolean {
+    const data = localStorage.getItem(this.STORAGE_KEY);
+    if (data) {
+      this.logout()
+      return true
+    } else {
+      return false
+    }
+  }
+
   private clearStorage(): void {
     localStorage.removeItem(this.STORAGE_KEY);
   }

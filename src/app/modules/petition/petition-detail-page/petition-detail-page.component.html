@@ -40,7 +40,7 @@
       </div>
 
       <button class="btn-primary support-button" *ngIf="petition()?.status === 'active'" (click)="support()"
-        [disabled]="userIsOwner">
+        [disabled]="userIsOwner || !userLogged" [title]="!userLogged? 'Faça login para ou registre-se apoiar': ''">
         <span class="material-symbols-outlined">edit_note</span>
         Assinar este Abaixo-Assinado
       </button>

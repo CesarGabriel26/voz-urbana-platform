@@ -51,4 +51,8 @@ export class ComplaintDetailPage implements OnInit {
   get userIsOwner() {
     return this.complaint()?.createdBy === this.authService.getUserFromStorage()?.id
   }
+
+  get userLogged() {
+    return this.authService.userLogged()
+  }
 }

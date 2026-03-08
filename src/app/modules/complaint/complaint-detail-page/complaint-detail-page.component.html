@@ -74,7 +74,7 @@
           <span>Pessoas</span>
         </div>
         <div class="actions">
-          <button class="btn btn-primary" [disabled]="userIsOwner">
+          <button class="btn btn-primary" [disabled]="userIsOwner || !userLogged" [title]="!userLogged? 'Faça login para ou registre-se apoiar': ''">
             Confirmar que o problema existe
           </button>
         </div>
