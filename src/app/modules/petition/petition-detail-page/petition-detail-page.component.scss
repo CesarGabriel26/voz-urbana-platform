@@ -1,7 +1,15 @@
+:host {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+}
+
 .detail-page-container {
   width: 100%;
   padding: 2rem;
-  
+
   animation: fadeIn 0.5s ease-out;
 
   .detail-header {
