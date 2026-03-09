@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-about-page',
@@ -10,6 +11,11 @@ import { RouterModule } from '@angular/router';
   styleUrl: './about-page.component.scss'
 })
 export class AboutPage {
+
+  constructor(
+    private authService: AuthService
+  ){}
+
   team = [
     {
       name: 'Cesar Gabriel',
@@ -59,4 +65,8 @@ export class AboutPage {
       description: 'Incentive a melhoria na infraestrutura através da participação ativa.'
     }
   ];
+
+  get userIsLogged() {
+    return this.authService.userLogged()
+  }
 }

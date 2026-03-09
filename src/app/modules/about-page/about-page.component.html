@@ -90,7 +90,11 @@
         <h2>Sua voz tem poder.</h2>
         <p>Comece hoje mesmo a transformar seu bairro.</p>
         <div class="cta-actions">
-            <a routerLink="/complaint/create" class="btn-about primary">Reportar Problema</a>
+            @if (userIsLogged) {
+                <a routerLink="/complaint/create" class="btn-about primary">Reportar Problema</a>
+            } @else {
+                <a routerLink="/login" class="btn-about primary">Reportar Problema</a>
+            }
             <a routerLink="/petitions" class="btn-about secondary">Ver Petições</a>
         </div>
     </div>
