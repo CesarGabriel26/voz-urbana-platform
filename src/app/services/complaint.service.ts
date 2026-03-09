@@ -24,8 +24,8 @@ export class ComplaintService {
     return headers
   }
 
-  getComplaints(): Observable<Complaint[]> {
-    return this.http.get<Complaint[]>(`${config.api}/complaints`)
+  getComplaints(filter?: { status?: string, category?: string, createdBy?: string }): Observable<Complaint[]> {
+    return this.http.get<Complaint[]>(`${config.api}/complaints`, { params: filter })
   }
 
   getMyComplaints(): Observable<Complaint[]> {

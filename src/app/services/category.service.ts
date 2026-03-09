@@ -10,7 +10,7 @@ import { Category } from '../types/category';
 export class CategoryService {
     private http = inject(HttpClient);
 
-    getCategories(filter: { active: boolean, type: string }): Observable<Category[]> {
+    getCategories(filter?: { active?: boolean, type?: string }): Observable<Category[]> {
         return this.http.get<Category[]>(`${config.api}/categories`, { params: filter })
     }
 

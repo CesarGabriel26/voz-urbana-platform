@@ -1,0 +1,55 @@
+:host {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.tabs {
+    display: flex;
+    gap: .5rem;
+    border-bottom: 1px solid var(--gray-4);
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .6rem 1rem;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: var(--gray-9);
+}
+
+.tab.active {
+    background: white;
+    border-bottom: 2px solid var(--blue-9);
+    color: var(--blue-10);
+}
+
+:host {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.tabs-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0; // 👈 essencial
+
+    div {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0; // 👈 ESSENCIAL para permitir scroll interno
+
+        &.hidden {
+            display: none;
+        }
+    }
+}
+

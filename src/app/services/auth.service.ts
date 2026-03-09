@@ -72,6 +72,23 @@ export class AuthService {
     }
   }
 
+  getPayload(): any | null {
+    const token = this.getTokenFromStorage();
+    if (!token) return null;
+
+    try {
+      const payload = token.split('.')[1];
+      return JSON.parse(atob(payload));
+    } catch {
+      return null;
+    }
+  }
+
+  getRole(): string | null {
+    const payload = this.getPayload();
+    return payload?.role ?? null;
+  }
+
   private clearStorage(): void {
     localStorage.removeItem(this.STORAGE_KEY);
   }

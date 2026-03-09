@@ -1,0 +1,36 @@
+<div class="data-table">
+    <div class="search">
+        <m-form-input [formControl]="searchControl" [control]="searchControl"
+            placeholder="Buscar reclamações por título, descrição ou categoria..." icon="search">
+        </m-form-input>
+    </div>
+    <div class="table-content">
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Peso</th>
+                    <th>Descrição</th>
+                    <th>Ativo</th>
+                    <th>Criado em</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (category of filteredCategories(); track $index) {
+                <tr>
+                    <td>{{ category.id }}</td>
+                    <td>{{ category.name }}</td>
+                    <td>{{ category.type }}</td>
+                    <td>{{ category.weight }}</td>
+                    <td>{{ category.description }}</td>
+                    <td>{{ category.active }}</td>
+                    <td>{{ category.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

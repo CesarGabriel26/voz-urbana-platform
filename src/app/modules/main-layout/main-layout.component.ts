@@ -68,6 +68,11 @@ export class MainLayoutComponent {
       label: 'Register',
       link: '/signup',
       isVisible: () => !this.authService.isAuthenticated()
-    }
+    },
+    {
+      label: 'Painel ADM',
+      link: '/admin',
+      isVisible: () => (this.authService.isAuthenticated() && this.authService.getRole()?.toLocaleLowerCase() == 'admin')
+    },
   ];
 }

@@ -11,6 +11,8 @@ import { PetitionListPage } from './modules/petition/petition-list-page/petition
 import { ComplaintDetailPage } from './modules/complaint/complaint-detail-page/complaint-detail-page.component';
 import { PetitionDetailPage } from './modules/petition/petition-detail-page/petition-detail-page.component';
 import { AboutPage } from './modules/about-page/about-page.component';
+import { AdminPage } from './modules/admin-page/admin-page';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
     {
@@ -72,6 +74,12 @@ export const routes: Routes = [
                 title: 'Voz Urbana - Meus Abaixo-Assinados',
                 component: PetitionListPage,
                 data: { isMyPetitions: true }
+            },
+            {
+                path: 'admin',
+                component: AdminPage,
+                canActivate: [roleGuard],
+                data: { role: 'admin' }
             }
         ]
     },

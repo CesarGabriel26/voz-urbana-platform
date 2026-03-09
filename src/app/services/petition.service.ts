@@ -30,8 +30,8 @@ export class PetitionService {
     return headers
   }
 
-  getPetitions(): Observable<Petition[]> {
-    return this.http.get<Petition[]>(`${config.api}/petitions`)
+  getPetitions(filter?: { status?: string, scope?: string, category?: string }): Observable<Petition[]> {
+    return this.http.get<Petition[]>(`${config.api}/petitions`, { params: filter })
   }
 
   getMyPetitions(): Observable<Petition[]> {
