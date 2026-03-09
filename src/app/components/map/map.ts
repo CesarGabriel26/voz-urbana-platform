@@ -1,6 +1,5 @@
 import { Component, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as L from 'leaflet';
-import 'leaflet.markercluster/dist/leaflet.markercluster.js';
 import 'leaflet.heat';
 import 'leaflet.markercluster';
 
@@ -26,10 +25,12 @@ export class MapComponent implements AfterViewInit, OnChanges {
   @Input() zoom: number = 13;
   @Input() showHeatmap: boolean = false;
 
+  @Input() useClustering: boolean = false;
+
   @Output() pointClick = new EventEmitter<MapPoint>();
 
   private map!: L.Map;
-  private markers!: L.MarkerClusterGroup;
+  private markers!: L.FeatureGroup;
   private heatLayer?: any;
 
   ngAfterViewInit(): void {
@@ -51,7 +52,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
       this.map.setView([lat, lng], zoom || 16);
 
       // Auto-open popup if point exists
-      this.markers.getLayers().forEach((layer: any) => {
+      const layers = (this.markers as any).getLayers ? this.markers.getLayers() : [];
+      layers.forEach((layer: any) => {
         if (layer instanceof L.Marker) {
           const latLng = layer.getLatLng();
           if (latLng.lat === lat && latLng.lng === lng) {
@@ -71,11 +73,18 @@ export class MapComponent implements AfterViewInit, OnChanges {
       attribution: '© OpenStreetMap'
     }).addTo(this.map);
 
-    this.markers = L.markerClusterGroup({
-      showCoverageOnHover: false,
-      spiderfyOnMaxZoom: true,
-      zoomToBoundsOnClick: true
-    });
+    const canCluster = typeof (L as any).markerClusterGroup === 'function';
+
+    if (this.useClustering && canCluster) {
+      this.markers = (L as any).markerClusterGroup({
+        showCoverageOnHover: false,
+        spiderfyOnMaxZoom: true,
+        zoomToBoundsOnClick: true
+      });
+    } else {
+      this.markers = L.featureGroup();
+    }
+
     this.map.addLayer(this.markers);
 
     if (this.showHeatmap) {
