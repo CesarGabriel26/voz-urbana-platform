@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import * as L from 'leaflet';
+import 'leaflet.markercluster/dist/leaflet.markercluster.js';
 import 'leaflet.heat';
 import 'leaflet.markercluster';
 

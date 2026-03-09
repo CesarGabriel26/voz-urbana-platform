@@ -46,8 +46,8 @@ export class PetitionListPage implements OnInit {
 
   loadPetitions() {
     this.isLoading = true;
-    const obs = this.isMyPetitions 
-      ? this.petitionService.getMyPetitions() 
+    const obs = this.isMyPetitions
+      ? this.petitionService.getMyPetitions()
       : this.petitionService.getPetitions();
 
     obs.subscribe(data => {
@@ -70,8 +70,8 @@ export class PetitionListPage implements OnInit {
   get filteredPetitions() {
     const search = this.searchControl.value?.toLowerCase() || '';
     if (!search) return this.petitions();
-    return this.petitions().filter(p => 
-      p.title.toLowerCase().includes(search) || 
+    return this.petitions().filter(p =>
+      p.title.toLowerCase().includes(search) ||
       p.description.toLowerCase().includes(search) ||
       p.category.toLowerCase().includes(search) ||
       p.location.neighborhood.toLowerCase().includes(search)
@@ -79,13 +79,15 @@ export class PetitionListPage implements OnInit {
   }
 
   get mapPoints(): MapPoint[] {
-    return this.filteredPetitions.map(p => ({
-      id: p.id,
-      lat: p.location.lat,
-      lng: p.location.lng,
-      title: p.title,
-      color: 'var(--blue-10)',
-      popupContent: `
+    return this.filteredPetitions
+      .filter(p => p.location && p.location.lat && p.location.lng)
+      .map(p => ({
+        id: p.id,
+        lat: p.location.lat,
+        lng: p.location.lng,
+        title: p.title,
+        color: 'var(--blue-10)',
+        popupContent: `
         <div style="font-family: 'Raleway', sans-serif;">
             <strong style="color: var(--blue-10); font-size: 1.1rem;">${p.title}</strong>
             <p style="margin: 8px 0; font-size: 0.9rem; color: var(--gray-11);">${p.description.substring(0, 100)}...</p>
@@ -103,6 +105,6 @@ export class PetitionListPage implements OnInit {
             </div>
         </div>
       `
-    }));
+      }));
   }
 }
