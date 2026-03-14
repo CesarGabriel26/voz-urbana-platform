@@ -1,3 +1,10 @@
+:host {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+}
 .detail-page-container {
   padding: 2rem;
   max-width: 1200px;
