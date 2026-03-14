@@ -1,0 +1,59 @@
+<div class="analytics-grid" *ngIf="stats() as s">
+  <!-- Evolution Chart -->
+  <section class="chart-card wide">
+    <h3>Evolução Mensal</h3>
+    <div class="chart-container">
+      <ngx-charts-area-chart [scheme]="colorScheme()" [results]="s.evolution" [xAxis]="true" [yAxis]="true"
+        [legend]="false" [autoScale]="true">
+        <ng-template #tooltipTemplate let-model="model">
+          <div class="custom-tooltip">
+            <h4>{{ model.name }}</h4>
+            <div class="tooltip-value">
+              <span class="label">Volume:</span>
+              <span>{{ model.value }}</span>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template #seriesTooltipTemplate let-model="model">
+          <div class="custom-tooltip">
+            <h4>Série Mensal</h4>
+            <div class="tooltip-value" *ngFor="let item of model">
+              <span class="label">{{ item.name }}:</span>
+              <span>{{ item.value }}</span>
+            </div>
+          </div>
+        </ng-template>
+      </ngx-charts-area-chart>
+    </div>
+  </section>
+
+  <!-- Categories Chart -->
+  <section class="chart-card">
+    <h3>Distribuição por Categoria</h3>
+    <div class="chart-container">
+      <ngx-charts-pie-chart [scheme]="colorScheme()" [results]="s.distributions.categories" [legend]="true"
+        [doughnut]="true">
+        <ng-template #tooltipTemplate let-model="model">
+          <div class="custom-tooltip">
+            <h4>{{ model.name }}</h4>
+            <div class="tooltip-value">
+              <span class="label">Ocorrências:</span>
+              <span>{{ model.value }}</span>
+            </div>
+          </div>
+        </ng-template>
+      </ngx-charts-pie-chart>
+    </div>
+  </section>
+
+  <!-- Neighborhoods -->
+  <section class="chart-card">
+    <h3>Bairros Críticos</h3>
+    <div class="neighborhood-list">
+      <div class="neighborhood-item" *ngFor="let area of s.distributions.neighborhoods">
+        <span>{{ area.name }}</span>
+        <span class="badge">{{ area.value }}</span>
+      </div>
+    </div>
+  </section>
+</div>

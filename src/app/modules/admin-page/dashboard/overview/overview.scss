@@ -1,0 +1,75 @@
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  padding: 8px;
+}
+
+.indicator-card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid var(--gray-3);
+
+  .label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-10);
+    text-transform: uppercase;
+  }
+
+  .value {
+    font-size: 2.25rem;
+    font-weight: 800;
+  }
+
+  .trend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    &.up { color: var(--green-10); }
+    &.down { color: var(--red-10); }
+    &.neutral { color: var(--blue-10); }
+  }
+}
+
+.health-score-card {
+  background: linear-gradient(135deg, var(--blue-10) 0%, var(--indigo-10) 100%);
+  color: white;
+  align-items: center;
+  text-align: center;
+
+  .health-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 8px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    .score { font-size: 3rem; font-weight: 900; }
+    svg {
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      width: 140px;
+      height: 140px;
+      transform: rotate(-90deg);
+      circle {
+        fill: none;
+        stroke: white;
+        stroke-width: 8;
+        stroke-dasharray: 414;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 1s ease-out;
+      }
+    }
+  }
+}

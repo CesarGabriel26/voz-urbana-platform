@@ -23,6 +23,10 @@ export class AuthService {
     private http: HttpClient
   ) { }
 
+  getUser(): User | null {
+    return this._user();
+  }
+
   private handleHttpError<T>(fallback: T, operation: string, entityId?: string | number) {
     return (error: HttpErrorResponse): Observable<T> => {
       console.error(

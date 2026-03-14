@@ -82,6 +82,10 @@ export class ComplaintCreatePage implements OnInit {
     });
   }
 
+  get categoryName() {
+    return this.categories().find(c => c.value === this.form.get('step1')?.get('category')?.value)?.label;
+  }
+
   asFormControl(control: AbstractControl | null): FormControl {
     return control as FormControl;
   }

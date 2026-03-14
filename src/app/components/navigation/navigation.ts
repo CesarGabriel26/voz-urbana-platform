@@ -6,7 +6,11 @@ export interface NavItem {
   link?: string; // Optional if it has children
   exact?: boolean;
   children?: NavItem[];
+  onClick?: () => void;
   isVisible?: () => boolean;
+  type?: 'btn-link' | 'link-item';
+  icon?: string;
+  variant?: 'default' | 'icon-only' | 'profile';
 }
 
 @Component({
@@ -57,6 +61,18 @@ export class Navigation {
 
   shouldShowItem(item: NavItem): boolean {
     return item.isVisible ? item.isVisible() : true;
+  }
+
+  decodeCLick(item: NavItem, event: Event) {
+    console.log('a');
+    
+    if (item.onClick) {
+      item.onClick();
+    } else if (item.children) {
+      this.toggleDropdown(item, event);
+    } else {
+      this.closeMenu();
+    }
   }
 
   @HostListener('document:click', ['$event'])

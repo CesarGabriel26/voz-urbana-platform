@@ -1,0 +1,70 @@
+<div class="admin-complaints">
+    <div class="header">
+        <h1>Gerenciar Reclamações</h1>
+        <div class="search-box">
+            <m-form-input [formControl]="searchControl" [control]="searchControl"
+                placeholder="Buscar por título, descrição ou status..." icon="search">
+            </m-form-input>
+        </div>
+    </div>
+
+    <m-data-table 
+        [data]="complaints()" 
+        [columns]="columns" 
+        [filterFields]="filterFields" 
+        layout="cards-horizontal"
+        [query]="searchControl.value" 
+        [pageSize]="10"
+        [cardTemplate]="complaintCard"
+    >
+    </m-data-table>
+
+    <ng-template #complaintCard let-item>
+        <div class="complaint-card">
+            <div class="card-header">
+                <div class="title-group">
+                    <h3>{{ item.title }}</h3>
+                    <span class="category">{{ item.category_name }}</span>
+                </div>
+                <div class="status-badge" [attr.data-status]="item.status">
+                    {{ getStatusLabel(item.status) }}
+                </div>
+            </div>
+
+            <div class="card-body">
+                <p class="description">{{ item.description }}</p>
+                <div class="meta">
+                    <span><i class="material-symbols-outlined">location_on</i> {{ item.address || 'Localização não informada' }}</span>
+                    <span><i class="material-symbols-outlined">calendar_today</i> {{ item.createdAt | date:'short' }}</span>
+                </div>
+            </div>
+
+            <div class="card-actions">
+                @if (item.status === 'pending') {
+                    <button class="btn btn-accept" (click)="updateStatus(item.id, 'accepted')">
+                        <i class="material-symbols-outlined">check_circle</i> Aceitar
+                    </button>
+                    <button class="btn btn-reject" (click)="updateStatus(item.id, 'rejected')">
+                        <i class="material-symbols-outlined">cancel</i> Rejeitar
+                    </button>
+                }
+
+                @if (item.status === 'accepted') {
+                    <button class="btn btn-progress" (click)="updateStatus(item.id, 'in-progress')">
+                        <i class="material-symbols-outlined">engineering</i> Iniciar Atendimento
+                    </button>
+                }
+
+                @if (item.status === 'in-progress') {
+                    <button class="btn btn-resolve" (click)="updateStatus(item.id, 'resolved')">
+                        <i class="material-symbols-outlined">task_alt</i> Marcar como Resolvida
+                    </button>
+                }
+                
+                <button class="btn btn-view" title="Ver Detalhes">
+                    <i class="material-symbols-outlined">visibility</i>
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</div>

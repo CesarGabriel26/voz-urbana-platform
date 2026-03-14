@@ -13,6 +13,7 @@ import { PetitionDetailPage } from './modules/petition/petition-detail-page/peti
 import { AboutPage } from './modules/about-page/about-page.component';
 import { AdminPage } from './modules/admin-page/admin-page';
 import { roleGuard } from './guards/role.guard';
+import { SettingsComponent } from './modules/settings/settings.component';
 
 export const routes: Routes = [
     {
@@ -80,6 +81,12 @@ export const routes: Routes = [
                 component: AdminPage,
                 canActivate: [roleGuard],
                 data: { role: 'admin' }
+            },
+            {
+                path: 'settings',
+                title: 'Voz Urbana - Configurações',
+                component: SettingsComponent,
+                canActivate: [authGuard]
             }
         ]
     },

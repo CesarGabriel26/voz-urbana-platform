@@ -1,0 +1,33 @@
+<div class="alerts-grid" *ngIf="stats() as s">
+  
+  <div class="alert-column">
+    <section class="alert-card critical">
+      <h3><lucide-angular [img]="icon"></lucide-angular> Demandas Críticas</h3>
+      <div class="alert-list">
+        <div class="alert-item" *ngFor="let p of s.topProblems">
+          <strong>{{ p.title }}</strong>
+          <span>{{ p.votes }} confirmações • Prioridade Alta</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="alert-column">
+    <section class="alert-card prediction">
+      <div class="label">Predição de Demanda</div>
+      <h3>Em breve</h3>
+      <!-- <div class="value">+12% <span>Próximo mês</span></div>
+      <p>Aumento sazonal esperado para iluminação pública.</p> -->
+    </section>
+
+    <section class="alert-card active-alerts">
+      <div class="label">Alertas Urbanos Ativos</div>
+      <ul class="active-list">
+        <li><h3>Em breve</h3></li>
+        <!-- <li>🚧 Rua XV bloqueada</li>
+        <li>⚠️ Acidente na Av Brasil</li>
+        <li>🌧 Risco de alagamento</li> -->
+      </ul>
+    </section>
+  </div>
+</div>

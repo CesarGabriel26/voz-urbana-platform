@@ -1,0 +1,53 @@
+<div class="overview-grid" *ngIf="stats() as s">
+  <!-- Health Score Widget -->
+  <div class="indicator-card health-score-card">
+    <div class="health-circle">
+      <span class="score">{{ s.healthScore }}</span>
+      <svg>
+        <circle cx="70" cy="70" r="66" [style.strokeDashoffset]="414 - (414 * s.healthScore / 100)"></circle>
+      </svg>
+    </div>
+    <span class="label">Saúde Urbana</span>
+    <div class="trend" [ngClass]="s.healthScore > 70 ? 'up' : 'down'">
+      <lucide-angular [img]="s.healthScore > 70 ? icons.Trend : icons.Warning"></lucide-angular>
+      <span>{{ s.healthScore > 70 ? 'Excelente' : 'Crítico' }}</span>
+    </div>
+  </div>
+
+  <!-- Core Cards -->
+  <div class="indicator-card">
+    <div class="label">Reclamações Abertas</div>
+    <div class="value">{{ s.indicators.openComplaints }}</div>
+    <div class="trend down">
+      <lucide-angular [img]="icons.Alert"></lucide-angular>
+      <span>Aguardando ação</span>
+    </div>
+  </div>
+
+  <div class="indicator-card">
+    <div class="label">Resolvidas</div>
+    <div class="value">{{ s.indicators.resolvedComplaints }}</div>
+    <div class="trend up">
+      <lucide-angular [img]="icons.Check"></lucide-angular>
+      <span>{{ s.indicators.resolutionRate }}% taxa</span>
+    </div>
+  </div>
+
+  <div class="indicator-card">
+    <div class="label">Tempo Médio</div>
+    <div class="value">{{ s.indicators.avgResolutionTime }}d</div>
+    <div class="trend neutral">
+      <lucide-angular [img]="icons.Clock"></lucide-angular>
+      <span>Resolução rápida</span>
+    </div>
+  </div>
+
+  <div class="indicator-card">
+    <div class="label">Engajamento total</div>
+    <div class="value">{{ s.participation.engagements }}</div>
+    <div class="trend neutral">
+      <lucide-angular [img]="icons.Users"></lucide-angular>
+      <span>{{ s.participation.activeUsers }} usuários</span>
+    </div>
+  </div>
+</div>

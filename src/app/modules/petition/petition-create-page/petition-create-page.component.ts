@@ -123,6 +123,10 @@ export class PetitionCreatePage implements OnInit {
     });
   }
 
+  get categoryName() {
+    return this.categories().find(c => c.value === this.form.get('step1')?.get('category')?.value)?.label;
+  }
+
   loadStates() {
     this.ibgeService.getStates().subscribe((states: any[]) => {
       this.states.set(states.map((s: any) => ({ label: s.nome, value: s.id })));

@@ -14,14 +14,20 @@
                 <ul class="nav-links primary">
                     @for(item of primaryItems; track $index){
                     @if (shouldShowItem(item)) {
-                    <li class="link-item" [class.has-dropdown]="item.children"
-                        [class.dropdown-active]="isDropdownOpen(item)"
+                    <li 
+                        [class]="item.type || 'link-item'" 
                         [routerLinkActive]="'active'"
+                        (click)="decodeCLick(item, $event)" 
+                        [class.has-dropdown]="item.children"
+                        [class.dropdown-active]="isDropdownOpen(item)"
                         [routerLinkActiveOptions]="item.exact ? { exact: true } : { exact: false }"
-                        (click)="item.children ? toggleDropdown(item, $event) : closeMenu()">
+                    >
 
                         @if (item.children) {
                         <a class="dropdown-trigger">
+                            @if(item.icon){
+                            <span class="material-symbols-outlined">{{ item.icon }}</span>
+                            }
                             {{ item.label }}
                             <span class="material-symbols-outlined icon-small">expand_more</span>
                         </a>
@@ -30,14 +36,24 @@
                                 @for(child of item.children; track $index) {
                                 @if (shouldShowItem(child)) {
                                 <li class="dropdown-item" (click)="closeMenu(); $event.stopPropagation()">
-                                    <a [routerLink]="child.link" routerLinkActive="active">{{ child.label }}</a>
+                                    <a [routerLink]="child.link" routerLinkActive="active">
+                                        @if(child.icon){
+                                        <span class="material-symbols-outlined">{{ child.icon }}</span>
+                                        }
+                                        {{ child.label }}
+                                    </a>
                                 </li>
                                 }
                                 }
                             </div>
                         </ul>
                         } @else {
-                        <a [routerLink]="item.link">{{ item.label }}</a>
+                        <a [routerLink]="item.link">
+                            @if(item.icon){
+                            <span class="material-symbols-outlined">{{ item.icon }}</span>
+                            }
+                            {{ item.label }}
+                        </a>
                         }
                     </li>
                     }
@@ -51,8 +67,66 @@
                 <ul class="nav-links secondary">
                     @for(item of secondaryItems; track $index){
                     @if (shouldShowItem(item)) {
-                    <li class="btn-link" routerLinkActive="active" (click)="closeMenu()">
-                        <a [routerLink]="item.link" class="btn btn-ghost">{{ item.label }}</a>
+                    <li 
+                        [class]="item.type || 'btn-link'" 
+                        [routerLinkActive]="'active'"
+                        (click)="decodeCLick(item, $event)" 
+                        [class.has-dropdown]="item.children"
+                        [class.dropdown-active]="isDropdownOpen(item)"
+                        [routerLinkActiveOptions]="item.exact ? { exact: true } : { exact: false }"
+                    >
+                        
+                        @if (item.children) {
+                            <a class="dropdown-trigger" [class.profile-trigger]="item.variant === 'profile'">
+                                @if(item.icon){
+                                <span class="material-symbols-outlined">{{ item.icon }}</span>
+                                }
+                                @if(item.variant !== 'icon-only' && item.variant !== 'profile'){
+                                {{ item.label }}
+                                }
+                                @if(item.variant === 'profile'){
+                                    <div class="profile-avatar">
+                                        <span class="material-symbols-outlined">account_circle</span>
+                                    </div>
+                                }
+                            </a>
+                            <ul class="dropdown-menu right-aligned" (click)="$event.stopPropagation()">
+                                <div class="dropdown-menu-content">
+                                    @for(child of item.children; track $index) {
+                                    @if (shouldShowItem(child)) {
+                                    <li class="dropdown-item" (click)="closeMenu(); $event.stopPropagation()">
+                                        <a [routerLink]="child.link" routerLinkActive="active">
+                                            @if(child.icon){
+                                            <span class="material-symbols-outlined">{{ child.icon }}</span>
+                                            }
+                                            {{ child.label }}
+                                        </a>
+                                    </li>
+                                    }
+                                    }
+                                </div>
+                            </ul>
+                        } @else {
+                            @if(item.type && item.type == 'link-item') {
+                            <a [routerLink]="item.link" [class.icon-only]="item.variant === 'icon-only'">
+                                @if(item.icon){
+                                <span class="material-symbols-outlined">{{ item.icon }}</span>
+                                }
+                                @if(item.variant !== 'icon-only'){
+                                {{ item.label }}
+                                }
+                            </a>
+                            } @else {
+                            <a [routerLink]="item.link" class="btn btn-ghost" [class.icon-only]="item.variant === 'icon-only'">
+                                @if(item.icon){
+                                <span class="material-symbols-outlined">{{ item.icon }}</span>
+                                }
+                                @if(item.variant !== 'icon-only'){
+                                {{ item.label }}
+                                }
+                            </a>
+                            }
+                        }
                     </li>
                     }
                     }

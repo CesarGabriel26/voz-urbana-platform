@@ -210,6 +210,42 @@ nav {
     }
 }
 
+.material-symbols-outlined {
+    vertical-align: middle;
+    font-size: 1.25rem;
+}
+
+.nav-links li a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.icon-only {
+    padding: 0.5rem !important;
+}
+
+.dropdown-menu.right-aligned {
+    left: auto;
+    right: 0;
+}
+
+.profile-trigger {
+    padding: 0;
+    .profile-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        span {
+            font-size: 24px;
+        }
+    }
+}
+
 .btn-link {
     a {
         text-decoration: none;
@@ -288,10 +324,6 @@ nav {
             .dropdown-menu {
                 grid-template-rows: 1fr;
             }
-
-            .dropdown-menu-content {}
-
-            .dropdown-menu-content {}
         }
 
         .dropdown-menu {
@@ -326,10 +358,6 @@ nav {
 
     .menu-toggle {
         display: flex;
-    }
-
-    .extra-content {
-        margin: 1.5rem 0;
     }
 
     .nav-backdrop {

@@ -17,25 +17,9 @@
         margin-bottom: 1rem;
     }
 
-    .table-content {
+    m-data-table {
         flex: 1;
-        overflow: auto;
-    }
-
-    thead {
-        top: 0;
-        z-index: 2;
-        position: sticky;
-        background: white;
-    }
-
-    table {
-        width: 100%;
-
-        th,
-        td {
-            text-align: start;
-        }
+        min-height: 0;
     }
 }
 

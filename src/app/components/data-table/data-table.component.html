@@ -1,0 +1,95 @@
+<div class="data-table-container">
+
+    @if (query() === null) {
+    <div class="search-wrapper">
+        <div class="search">
+            <button type="button" class="search-icon">
+                <span class="material-symbols-outlined"> search </span>
+            </button>
+
+            <input type="text" [ngModel]="filterText()" (ngModelChange)="onSearchChange($event)"
+                [placeholder]="placeholder()" />
+        </div>
+    </div>
+    }
+
+    @if (layout() === 'table') {
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    @for (col of columns(); track col.key) {
+                    <th>{{ col.label }}</th>
+                    }
+                </tr>
+            </thead>
+
+            <tbody>
+                @for (row of paginatedData(); track row) {
+                <tr>
+                    @for (col of columns(); track col.key) {
+                    <td>{{ row[col.key] }}</td>
+                    }
+                </tr>
+                } @empty {
+                <tr>
+                    <td [attr.colspan]="columns().length" class="empty-state">
+                        Nenhum resultado encontrado.
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    }
+
+    @if (layout() === 'cards') {
+
+    <div class="card-list">
+
+        @for (item of paginatedData(); track item) {
+
+        <ng-container *ngTemplateOutlet="cardTemplate(); context: { $implicit: item }">
+        </ng-container>
+
+        } @empty {
+
+        <div class="empty-state">
+            Nenhum resultado encontrado
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+    @if (layout() === 'cards-horizontal') {
+
+    <div class="card-list-horizontal">
+
+        @for (item of paginatedData(); track item) {
+
+        <ng-container *ngTemplateOutlet="cardTemplate(); context: { $implicit: item }">
+        </ng-container>
+
+        } @empty {
+
+        <div class="empty-state">
+            Nenhum resultado encontrado
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+    <div class="pagination-wrapper">
+        <m-pagination [totalItems]="filteredData().length" [pageSize]="pageSize()" [currentPage]="currentPage()"
+            (pageChange)="currentPage.set($event)">
+        </m-pagination>
+    </div>
+</div>
