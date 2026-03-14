@@ -2,6 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { SwPush } from '@angular/service-worker';
 import { HttpClient } from '@angular/common/http';
 import { config } from '../config';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,17 +30,14 @@ export class PushNotificationService {
     try {
       console.log('chamado');
 
-      const registration = await navigator.serviceWorker.ready;
-
-      const sub = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: this.VAPID_PUBLIC_KEY
+      const sub = await this.swPush.requestSubscription({
+        serverPublicKey: this.VAPID_PUBLIC_KEY
       });
 
       console.log('subscription', sub);
-      await this.http.post(`${config.api}/users/push/subscribe`, sub).toPromise();
+      await firstValueFrom(this.http.post(`${config.api}/users/push/subscribe`, sub));
       this.isSubscribed.set(true);
-      this.notifyEnabled()
+      this.notifyEnabled();
       return true;
 
     } catch (err) {
@@ -61,9 +59,9 @@ export class PushNotificationService {
 
   async unsubscribeFromNotifications() {
     try {
-      const sub = await this.swPush.subscription.toPromise();
+      const sub = await firstValueFrom(this.swPush.subscription);
       if (sub) {
-        await this.http.post(`${config.api}/users/push/unsubscribe`, { endpoint: sub.endpoint }).toPromise();
+        await firstValueFrom(this.http.post(`${config.api}/users/push/unsubscribe`, { endpoint: sub.endpoint }));
         await sub.unsubscribe();
       }
       this.isSubscribed.set(false);
