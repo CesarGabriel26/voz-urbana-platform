@@ -27,19 +27,35 @@ export class PushNotificationService {
     }
 
     try {
-      const sub = await this.swPush.requestSubscription({
-        serverPublicKey: this.VAPID_PUBLIC_KEY
+      console.log('chamado');
+
+      const registration = await navigator.serviceWorker.ready;
+
+      const sub = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: this.VAPID_PUBLIC_KEY
       });
 
-      console.log(sub);
-
-      // await this.http.post(`${config.api}/users/push/subscribe`, sub).toPromise();
+      console.log('subscription', sub);
+      await this.http.post(`${config.api}/users/push/subscribe`, sub).toPromise();
       this.isSubscribed.set(true);
+      this.notifyEnabled()
       return true;
+
     } catch (err) {
       console.error('Could not subscribe to notifications', err);
       return false;
     }
+  }
+
+  notifyEnabled() {
+    if (Notification.permission !== 'granted') return;
+
+    new Notification('🔔 Voz Urbana', {
+      body: 'Agora você receberá atualizações sobre suas reclamações.',
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/badge-72x72.png'
+    });
   }
 
 
@@ -47,7 +63,7 @@ export class PushNotificationService {
     try {
       const sub = await this.swPush.subscription.toPromise();
       if (sub) {
-        // await this.http.post(`${config.api}/users/push/unsubscribe`, { endpoint: sub.endpoint }).toPromise();
+        await this.http.post(`${config.api}/users/push/unsubscribe`, { endpoint: sub.endpoint }).toPromise();
         await sub.unsubscribe();
       }
       this.isSubscribed.set(false);
