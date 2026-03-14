@@ -8,7 +8,7 @@ import { config } from '../config';
 })
 export class PushNotificationService {
   readonly VAPID_PUBLIC_KEY = 'BJoJIWa3BxxjTxe7fY57dEeWWDzH3629mzpaKOoFWboj2JT8F762J9Vq5jRPEGUzY_0o884I_ZCsRfyVwT4PzO8';
-  
+
   isSubscribed = signal(false);
 
   constructor(
@@ -21,12 +21,19 @@ export class PushNotificationService {
   }
 
   async subscribeToNotifications() {
+    if (!this.swPush.isEnabled) {
+      console.warn('Service Worker not enabled');
+      return false;
+    }
+
     try {
       const sub = await this.swPush.requestSubscription({
         serverPublicKey: this.VAPID_PUBLIC_KEY
       });
-      
-      await this.http.post(`${config.api}/users/push/subscribe`, sub).toPromise();
+
+      console.log(sub);
+
+      // await this.http.post(`${config.api}/users/push/subscribe`, sub).toPromise();
       this.isSubscribed.set(true);
       return true;
     } catch (err) {
@@ -35,11 +42,12 @@ export class PushNotificationService {
     }
   }
 
+
   async unsubscribeFromNotifications() {
     try {
       const sub = await this.swPush.subscription.toPromise();
       if (sub) {
-        await this.http.post(`${config.api}/users/push/unsubscribe`, { endpoint: sub.endpoint }).toPromise();
+        // await this.http.post(`${config.api}/users/push/unsubscribe`, { endpoint: sub.endpoint }).toPromise();
         await sub.unsubscribe();
       }
       this.isSubscribed.set(false);
