@@ -46,6 +46,9 @@
         display: flex;
         flex-direction: column;
         min-height: 0; // 👈 ESSENCIAL para permitir scroll interno
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 16px;
 
         &.hidden {
             display: none;

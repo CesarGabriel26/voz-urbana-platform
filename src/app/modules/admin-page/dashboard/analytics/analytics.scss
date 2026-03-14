@@ -1,8 +1,7 @@
 .analytics-grid {
+  gap: 24px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  padding: 8px;
 }
 
 .chart-card {
