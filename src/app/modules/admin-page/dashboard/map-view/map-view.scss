@@ -8,15 +8,20 @@
 .map-header {
   h3 { margin: 0; color: var(--blue-11); }
   span { font-size: 0.875rem; color: var(--gray-10); }
+  padding: .5rem;
+  border-radius: .5rem;
+  background-color: var(--content-bg);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .map-wrapper {
   flex: 1;
   min-height: 600px;
-  border-radius: 20px;
   overflow: hidden;
+  padding: .5rem;
+  border-radius: .5rem;
+  background-color: var(--content-bg);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border: 4px solid white;
 }
 
 ::ng-deep .map-popup {
