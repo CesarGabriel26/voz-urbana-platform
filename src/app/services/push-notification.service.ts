@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class PushNotificationService {
-  readonly VAPID_PUBLIC_KEY = 'BLO114RXRFYrH6Ha_MKSW-Jc4AZRdl4PNRGmYRWojyh9ESkTEEhXIM9X6OwOeWAZUL-QgCup0xgHy_9JyfSfuE8';
+  readonly VAPID_PUBLIC_KEY = config.VAPID_PUBLIC_KEY;
 
   isSubscribed = signal(false);
 

@@ -5,62 +5,47 @@
       <p>Siga os passos abaixo para relatar um problema na sua comunidade.</p>
     </header>
 
-    <m-steps [steps]="steps" [currentStep]="currentStep"></m-steps>
+    <m-steps [steps]="steps" [currentStep]="currentStep()"></m-steps>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-content">
-      
+
       <!-- Step 1: Basic Information -->
-      <div class="step-pane" *ngIf="currentStep === 0" formGroupName="step1">
+      <div class="step-pane" *ngIf="currentStep() === 0" formGroupName="step1">
         <h2 class="step-title">O que está acontecendo?</h2>
-        
+
         <div class="inputs-grid">
-          <m-form-input 
-            label="Título da Reclamação" 
-            placeholder="Ex: Buraco na Rua das Palmeiras"
-            [control]="asFormControl(step1.get('title'))"
-            icon="title">
+          <m-form-input label="Título da Reclamação" placeholder="Ex: Buraco na Rua das Palmeiras"
+            [control]="asFormControl(step1.get('title'))" icon="title">
           </m-form-input>
 
-          <m-form-select 
-            label="Categoria" 
-            [options]="categories()"
-            [control]="asFormControl(step1.get('category'))"
-            placeholder="Selecione o tipo de problema"
-            icon="category">
+          <m-form-select label="Categoria" [options]="categories()" [control]="asFormControl(step1.get('category'))"
+            placeholder="Selecione o tipo de problema" icon="category">
           </m-form-select>
 
           <div class="full-width">
-            <m-form-input 
-              label="Descrição Detalhada" 
-              placeholder="Descreva o problema com detalhes..."
-              [control]="asFormControl(step1.get('description'))"
-              type="textarea"
-              icon="description">
+            <m-form-input label="Descrição Detalhada" placeholder="Descreva o problema com detalhes..."
+              [control]="asFormControl(step1.get('description'))" type="textarea" icon="description">
             </m-form-input>
           </div>
         </div>
       </div>
 
       <!-- Step 2: Location -->
-      <div class="step-pane" *ngIf="currentStep === 1" formGroupName="step2">
+      <div class="step-pane" *ngIf="currentStep() === 1" formGroupName="step2">
         <h2 class="step-title">Onde isso está ocorrendo?</h2>
-        
+
         <div class="location-controls">
           <div class="search-box">
-            <m-form-input 
-              label="Buscar Endereço" 
-              placeholder="Digite a rua, bairro ou cidade..."
-              [(ngModel)]="addressSearchQuery"
-              [ngModelOptions]="{standalone: true}"
-              (keyup.enter)="searchAddress()"
-              icon="search">
+            <m-form-input label="Buscar Endereço" placeholder="Digite a rua, bairro ou cidade..."
+              [ngModel]="addressSearchQuery()" (ngModelChange)="addressSearchQuery.set($event)"
+              [ngModelOptions]="{standalone: true}" (keyup.enter)="searchAddress()" icon="search">
             </m-form-input>
-            <button type="button" class="btn-search" (click)="searchAddress()" [disabled]="isSearching">
-              <span class="material-symbols-outlined">{{ isSearching ? 'sync' : 'search' }}</span>
+            <button type="button" class="btn-search" (click)="searchAddress()" [disabled]="isSearching()">
+              <span class="material-symbols-outlined">{{ isSearching() ? 'sync' : 'search' }}</span>
             </button>
-            
-            <div class="search-results" *ngIf="searchResults.length > 0">
-              <div class="result-item" *ngFor="let result of searchResults" (click)='selectSearchResult(result)'>
+
+            <div class="search-results" *ngIf="searchResults().length > 0">
+              <div class="result-item" *ngFor="let result of searchResults()" (click)='selectSearchResult(result)'>
                 <span class="material-symbols-outlined">location_on</span>
                 <span class="result-text">{{ result.display_name }}</span>
               </div>
@@ -74,37 +59,62 @@
         </div>
 
         <div class="map-wrapper">
-          <m-map [points]="mapPoints" (pointClick)="onMapClick($event)"></m-map>
+          <m-map [points]="mapPoints()" (pointClick)="onMapClick($event)"></m-map>
           <div class="map-hint">
             <span class="material-symbols-outlined">info</span>
             Clique no mapa para marcar o local exato
           </div>
         </div>
 
-        <m-form-input 
-          label="Endereço Selecionado" 
-          [control]="asFormControl(step2.get('address'))"
-          icon="place"
+        <m-form-input label="Endereço Selecionado" [control]="asFormControl(step2.get('address'))" icon="place"
           [disabled]="true">
         </m-form-input>
       </div>
 
-      <!-- Step 3: Review & Privacy -->
-      <div class="step-pane" *ngIf="currentStep === 2" formGroupName="step3">
+      <!-- Step 3: Images -->
+      <div class="step-pane" *ngIf="currentStep() === 2">
+        <h2 class="step-title">Fotos do Problema</h2>
+
+        <div class="upload-container">
+          @if(selectedImage()) {
+          <div class="preview-box">
+            <img [src]="selectedImage()" alt="">
+            <button type="button" class="btn-remove" (click)="selectedImage.set(null); selectedFile.set(null)">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          } @else {
+          <div class="upload-placeholder" (click)="fileInput.click()">
+            <span class="material-symbols-outlined">add_a_photo</span>
+            <p>Clique para selecionar uma foto</p>
+            <p>Adicione uma foto para ajudar a identificar o problema.</p>
+          </div>
+          }
+          <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none">
+        </div>
+
+        <div class="upload-status" *ngIf="isUploading()">
+          <span class="material-symbols-outlined spin">sync</span>
+          Enviando imagem...
+        </div>
+      </div>
+
+      <!-- Step 4: Review & Privacy -->
+      <div class="step-pane" *ngIf="currentStep() === 3" formGroupName="step4">
         <h2 class="step-title">Finalizar e Publicar</h2>
-        
+
         <div class="review-grid">
           <div class="review-section">
             <label>Visibilidade da Reclamação</label>
-            <m-form-select 
-              [options]="visibilityOptions"
-              [control]="asFormControl(step3.get('visibility'))"
+            <m-form-select [options]="visibilityOptions" [control]="asFormControl(step4.get('visibility'))"
               icon="visibility">
             </m-form-select>
             <p class="visibility-hint">
-               {{ step3.get('visibility')?.value === 'public' ? 'Todos verão seu nome e a reclamação.' : '' }}
-               {{ step3.get('visibility')?.value === 'anonymous' ? 'Sua reclamação será pública, mas seu nome ficará oculto.' : '' }}
-               {{ step3.get('visibility')?.value === 'private' ? 'Apenas órgãos competentes terão acesso aos seus dados.' : '' }}
+              {{ step4.get('visibility')?.value === 'public' ? 'Todos verão seu nome e a reclamação.' : '' }}
+              {{ step4.get('visibility')?.value === 'anonymous' ? 'Sua reclamação será pública, mas seu nome ficará
+              oculto.' : '' }}
+              {{ step4.get('visibility')?.value === 'private' ? 'Apenas órgãos competentes terão acesso aos seus dados.'
+              : '' }}
             </p>
           </div>
 
@@ -114,7 +124,7 @@
               <strong>Título:</strong> {{ step1.get('title')?.value }}
             </div>
             <div class="summary-item">
-              <strong>Categoria:</strong> {{ categoryName }}
+              <strong>Categoria:</strong> {{ categoryName() }}
             </div>
             <div class="summary-item">
               <strong>Local:</strong> {{ step2.get('address')?.value }}
@@ -125,15 +135,17 @@
 
       <!-- Navigation Buttons -->
       <footer class="form-footer">
-        <button type="button" class="btn-secondary" (click)="prevStep()" *ngIf="currentStep > 0">
+        <button type="button" class="btn-secondary" (click)="prevStep()" *ngIf="currentStep() > 0">
           Voltar
         </button>
         <div class="spacer"></div>
-        <button type="button" class="btn-primary" (click)="nextStep()" *ngIf="currentStep < steps.length - 1">
-          Próximo
+        <button type="button" class="btn-primary" (click)="nextStep()" *ngIf="currentStep() < steps.length - 1"
+          [disabled]="isUploading()">
+          {{ isUploading() ? 'Processando...' : 'Próximo' }}
         </button>
-        <button type="submit" class="btn-primary btn-submit" *ngIf="currentStep === steps.length - 1" [disabled]="isSubmitting">
-          {{ isSubmitting ? 'Enviando...' : 'Criar Reclamação' }}
+        <button type="submit" class="btn-primary btn-submit" *ngIf="currentStep() === steps.length - 1"
+          [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Enviando...' : 'Criar Reclamação' }}
         </button>
       </footer>
 

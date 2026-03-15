@@ -18,6 +18,62 @@
   align-items: flex-start;
 }
 
+.preview-box {
+  max-width: 100%;
+  position: relative;
+  width: fit-content;
+
+  img {
+    max-height: 300px;
+    object-fit: fill;
+  }
+
+  .btn-remove {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: transparent;
+
+    span {
+      color: var(--red-5);
+      transition: all 0.2s;
+    }
+
+    &:hover {
+      span {
+        color: var(--red-9);
+      }
+    }
+  }
+}
+
+.upload-placeholder {
+  width: 100%;
+  display: flex;
+  cursor: pointer;
+  min-height: 300px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border: 2px dashed var(--gray-5);
+
+  span {
+    font-size: 3rem;
+  }
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+
 .content-card {
   width: 100%;
   min-height: 0;

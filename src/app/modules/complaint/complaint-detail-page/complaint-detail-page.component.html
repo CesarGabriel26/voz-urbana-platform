@@ -37,6 +37,9 @@
     <div class="content-grid">
       <div class="info-card description-card">
         <h3>Descrição</h3>
+        <div class="image-preview" *ngIf="complaint()?.imageUrl">
+          <img [src]="complaint()?.imageUrl" alt="Imagem da Reclamação">
+        </div>
         <p>{{ complaint()?.description }}</p>
       </div>
 

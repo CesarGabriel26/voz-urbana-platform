@@ -8,17 +8,19 @@ export interface Complaint {
     description: string
 
     category: string
-    category_name?: string
+    category_name: string
+    votes: number
+    urgency_level: number
 
     priority: number
     visibility: Visibility
 
     status: number
-    votes: number
 
     lat: number
     lng: number
     address?: string
+    imageUrl?: string
 
     createdBy: string
 
