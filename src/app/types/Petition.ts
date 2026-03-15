@@ -17,7 +17,7 @@ export interface Petition {
     cityIbgeCode?: string; // Útil para cruzar com dados do TSE
 
     visibility: Visibility;
-    status: "active" | "completed" | "archived";
+    status: number;
 
     // Geolocalização precisa para o mapa de reclamações
     location: {

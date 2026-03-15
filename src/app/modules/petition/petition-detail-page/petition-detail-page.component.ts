@@ -8,6 +8,7 @@ import { PetitionService } from '../../../services/petition.service';
 import { NavigationService } from '../../../services/navigarion.service';
 import { ModernNotificationService } from '../../../components/notification/notification.service';
 import { AuthService } from '../../../services/auth.service';
+import { PETITION_STATUS_LABELS, getPetitionStatusLabel } from '../../../utils/status';
 
 @Component({
   selector: 'app-petition-detail-page',
@@ -18,11 +19,19 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class PetitionDetailPage implements OnInit {
   petition = signal<Petition | undefined>(undefined);
-  steps = ['Em Coleta', 'Meta Atingida', 'Protocolado', 'Finalizado'];
-  statusMap: Record<string, number> = {
-    'active': 0,
-    'completed': 3,
-    'archived': 3
+  steps = [
+    PETITION_STATUS_LABELS[0],
+    PETITION_STATUS_LABELS[1],
+    PETITION_STATUS_LABELS[2],
+    PETITION_STATUS_LABELS[3],
+  ];
+  // -1: Cancelado/Arquivado, 0: Em Coleta, 1: Meta Atingida, 2: Protocolado, 3: Finalizado
+  statusMap: Record<number, number> = {
+    0: 0,
+    1: 1,
+    2: 2,
+    3: 3,
+    [-1]: 0
   };
 
   constructor(
@@ -45,11 +54,11 @@ export class PetitionDetailPage implements OnInit {
   }
 
   getCurrentStep(): number {
-    // If signatures >= goal, we could move to step 1
-    if (this.petition() && (this.petition()?.signaturesCount || 0) >= (this.petition()?.goal || 0)) {
-      return 1;
-    }
-    return this.statusMap[this.petition()?.status || 'active'];
+    return this.statusMap[Number(this.petition()?.status ?? 0)];
+  }
+
+  getStatusLabel(status: number): string {
+    return getPetitionStatusLabel(status);
   }
 
   getProgressPercentage(): number {

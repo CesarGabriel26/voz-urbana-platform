@@ -40,23 +40,23 @@
             </div>
 
             <div class="card-actions">
-                @if (item.status === 'pending') {
-                    <button class="btn btn-accept" (click)="updateStatus(item.id, 'accepted')">
+                @if (item.status === 0) {
+                    <button class="btn btn-accept" (click)="updateStatus(item.id, 1)">
                         <i class="material-symbols-outlined">check_circle</i> Aceitar
                     </button>
-                    <button class="btn btn-reject" (click)="updateStatus(item.id, 'rejected')">
+                    <button class="btn btn-reject" (click)="updateStatus(item.id, -1)">
                         <i class="material-symbols-outlined">cancel</i> Rejeitar
                     </button>
                 }
 
-                @if (item.status === 'accepted') {
-                    <button class="btn btn-progress" (click)="updateStatus(item.id, 'in-progress')">
+                @if (item.status === 1) {
+                    <button class="btn btn-progress" (click)="updateStatus(item.id, 2)">
                         <i class="material-symbols-outlined">engineering</i> Iniciar Atendimento
                     </button>
                 }
 
-                @if (item.status === 'in-progress') {
-                    <button class="btn btn-resolve" (click)="updateStatus(item.id, 'resolved')">
+                @if (item.status === 2) {
+                    <button class="btn btn-resolve" (click)="updateStatus(item.id, 3)">
                         <i class="material-symbols-outlined">task_alt</i> Marcar como Resolvida
                     </button>
                 }

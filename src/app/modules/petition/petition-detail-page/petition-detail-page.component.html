@@ -6,8 +6,9 @@
         Voltar
       </a>
       <div class="badges">
-        <div class="status-badge" [class.active]="petition()?.status === 'active'">
-          {{ petition()?.status === 'active' ? 'Ativo' : 'Finalizado' }}
+        <!-- Statis -1 rejeitado e 3 finalizado -->
+        <div class="status-badge" [class.active]="petition()?.status !== -1 && petition()?.status !== 3">
+          {{ getStatusLabel(petition()?.status ?? 0) }}
         </div>
         @if (userIsOwner) {
           <div class="status-badge active">
@@ -39,7 +40,7 @@
         </m-progress-bar>
       </div>
 
-      <button class="btn-primary support-button" *ngIf="petition()?.status === 'active'" (click)="support()"
+      <button class="btn-primary support-button" *ngIf="petition()?.status === 0" (click)="support()"
         [disabled]="userIsOwner || !userLogged" [title]="!userLogged? 'Faça login para apoiar': ''">
         <span class="material-symbols-outlined">edit_note</span>
         Assinar este Abaixo-Assinado

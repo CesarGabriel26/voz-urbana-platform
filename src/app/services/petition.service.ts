@@ -36,11 +36,12 @@ export class PetitionService {
 
   getMyPetitions(): Observable<Petition[]> {
     const headers = this.getHeaders()
-    return this.http.get<Petition[]>(`${config.api}/petitions/my`, { headers })
+    return this.http.get<Petition[]>(`${config.api}/petitions/petitions/mine`, { headers })
   }
 
   getPetition(id: string): Observable<Petition | undefined> {
-    return this.http.get<Petition>(`${config.api}/petitions/petition/${id}`)
+    const headers = this.getHeaders()
+    return this.http.get<Petition>(`${config.api}/petitions/${id}`, { headers })
   }
 
   calculateMinimumGoal(scope: string, totalVoters: number): number {

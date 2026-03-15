@@ -13,7 +13,7 @@ export interface Complaint {
     priority: number
     visibility: Visibility
 
-    status: string | "pending" | "in-progress" | "resolved" | "rejected"
+    status: number
     votes: number
 
     lat: number

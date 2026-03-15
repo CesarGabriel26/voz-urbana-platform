@@ -6,6 +6,7 @@ import { ComplaintService } from '../../../services/complaint.service';
 import { Complaint } from '../../../types/Complaint';
 import { DataTableComponent, TableColumn } from '../../../components/data-table/data-table.component';
 import { FormInputComponent } from '../../../components/form/form-input/form-input.component';
+import { getComplaintStatusLabel } from '../../../utils/status';
 
 @Component({
   selector: 'app-admin-complaints',
@@ -17,7 +18,7 @@ import { FormInputComponent } from '../../../components/form/form-input/form-inp
 export class ComplaintsPage implements OnInit {
   complaints = signal<Complaint[]>([]);
   searchControl = new FormControl('');
-  
+
   columns: TableColumn<Complaint>[] = [
     { key: 'title', label: 'Título' },
     { key: 'status', label: 'Status' },
@@ -27,7 +28,7 @@ export class ComplaintsPage implements OnInit {
 
   filterFields = ['title', 'description', 'category_name', 'status'] as (keyof Complaint)[];
 
-  constructor(private complaintService: ComplaintService) {}
+  constructor(private complaintService: ComplaintService) { }
 
   ngOnInit(): void {
     this.loadComplaints();
@@ -45,20 +46,13 @@ export class ComplaintsPage implements OnInit {
     });
   }
 
-  updateStatus(id: string, status: string): void {
+  updateStatus(id: string, status: number): void {
     this.complaintService.updateComplaintStatus(id, status).subscribe(() => {
       this.loadComplaints();
     });
   }
 
-  getStatusLabel(status: string): string {
-    const labels: Record<string, string> = {
-      pending: 'Pendente',
-      'in-progress': 'Em Andamento',
-      resolved: 'Resolvida',
-      rejected: 'Rejeitada',
-      accepted: 'Aceita'
-    };
-    return labels[status] || status;
+  getStatusLabel(status: number): string {
+    return getComplaintStatusLabel(status);
   }
 }

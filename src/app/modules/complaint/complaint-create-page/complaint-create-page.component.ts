@@ -181,7 +181,7 @@ export class ComplaintCreatePage implements OnInit {
       priority: 0,
       visibility: values.step3.visibility,
 
-      status: "pending",
+      status: 0,
 
       lat: values.step2.latitude,
       lng: values.step2.longitude,

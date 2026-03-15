@@ -48,7 +48,7 @@ export class ComplaintService {
     return this.http.post<HttpResponse<Complaint>>(`${config.api}/complaints/${id}/vote`, {}, { headers })
   }
 
-  updateComplaintStatus(id: string, status: string): Observable<Complaint> {
+  updateComplaintStatus(id: string, status: number): Observable<Complaint> {
     const headers = this.getHeaders()
     return this.http.put<Complaint>(`${config.api}/complaints/${id}`, { status }, { headers });
   }

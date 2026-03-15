@@ -11,6 +11,7 @@ import { PetitionService } from '../../../services/petition.service';
 import { IbgeService } from '../../../services/ibge.service';
 import { CategoryService } from '../../../services/category.service';
 import { Category } from '../../../types/category';
+import { Petition } from '../../../types/Petition';
 
 @Component({
   selector: 'app-petition-create-page',
@@ -264,7 +265,7 @@ export class PetitionCreatePage implements OnInit {
     this.isSubmitting = true;
 
     const formVal = this.form.value;
-    const petitionData = {
+    const petitionData: Petition = {
       ...formVal.step1,
       scope: formVal.step1.scope,
       cityIbgeCode: formVal.step2.cityIbgeCode,
@@ -275,7 +276,7 @@ export class PetitionCreatePage implements OnInit {
         address: formVal.step2.address,
         neighborhood: formVal.step2.neighborhood
       },
-      status: 'active',
+      status: 0,
       signaturesCount: 0,
       createdAt: new Date(),
       updatedAt: new Date()
