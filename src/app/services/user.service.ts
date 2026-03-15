@@ -1,16 +1,33 @@
 import { Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User, SignupRequest } from '../models/user.model';
 import { Observable, of } from 'rxjs';
+import { AuthService } from './auth.service';
+import { config } from '../config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  // Assuming a base API URL
-  private readonly apiUrl = 'api/users';
+  private readonly apiUrl = `${config.api}/users`;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) { }
+
+  private getHeaders() {
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.authService.getTokenFromStorage()}`
+    });
+  }
+
+  updateNotificationSettings(settings: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/notification-settings`, JSON.stringify(settings), {
+      headers: this.getHeaders()
+    });
+  }
 
   create(data: SignupRequest): Observable<User> {
     // Logic to create user

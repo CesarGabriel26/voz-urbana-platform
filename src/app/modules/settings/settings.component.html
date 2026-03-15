@@ -1,0 +1,99 @@
+<div class="settings-container">
+    <header>
+        <h1>Configurações</h1>
+        <p>Gerencie suas notificações e preferências</p>
+    </header>
+
+    <section class="settings-section">
+        <h2>Notificações</h2>
+
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="material-symbols-outlined">notifications</span>
+                <div>
+                    <h3>Push Notifications</h3>
+                    <p>Receber alertas no navegador</p>
+                </div>
+            </div>
+            <button class="btn" [class.btn-primary]="!pushService.isSubscribed()"
+                [class.btn-outline]="pushService.isSubscribed()" (click)="togglePush()">
+                {{ pushService.isSubscribed() ? 'Desativar' : 'Ativar' }}
+            </button>
+        </div>
+
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="material-symbols-outlined">volume_up</span>
+                <div>
+                    <h3>Notificação Sonora</h3>
+                    <p>Tocar um som ao receber notificações</p>
+                </div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" [(ngModel)]="settings.soundEnabled" (change)="saveSettings()">
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </section>
+
+    <section class="settings-section">
+        <h2>Assuntos de interesse</h2>
+        <p class="section-desc">Escolha sobre o que você deseja ser notificado:</p>
+
+        <div class="subject-grid">
+            <div class="subject-card">
+                <h3>Abaixo-assinados</h3>
+                <div class="subject-item">
+                    <span>Petição aceita</span>
+                    <label class="switch">
+                        <input type="checkbox" [(ngModel)]="settings.subjects.petitionAccepted"
+                            (change)="saveSettings()">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="subject-item">
+                    <span>Voto em petição</span>
+                    <label class="switch">
+                        <input type="checkbox" [(ngModel)]="settings.subjects.petitionVoted" (change)="saveSettings()">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="subject-item">
+                    <span>Status de petição</span>
+                    <label class="switch">
+                        <input type="checkbox" [(ngModel)]="settings.subjects.petitionStatusChanged"
+                            (change)="saveSettings()">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="subject-card">
+                <h3>Reclamações</h3>
+                <div class="subject-item">
+                    <span>Reclamação aceita</span>
+                    <label class="switch">
+                        <input type="checkbox" [(ngModel)]="settings.subjects.complaintAccepted"
+                            (change)="saveSettings()">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="subject-item">
+                    <span>Voto em reclamação</span>
+                    <label class="switch">
+                        <input type="checkbox" [(ngModel)]="settings.subjects.complaintVoted" (change)="saveSettings()">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="subject-item">
+                    <span>Status de reclamação</span>
+                    <label class="switch">
+                        <input type="checkbox" [(ngModel)]="settings.subjects.complaintStatusChanged"
+                            (change)="saveSettings()">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

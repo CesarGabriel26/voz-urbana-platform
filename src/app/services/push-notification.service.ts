@@ -1,24 +1,34 @@
 import { Injectable, signal } from '@angular/core';
 import { SwPush } from '@angular/service-worker';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { config } from '../config';
 import { firstValueFrom } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PushNotificationService {
-  readonly VAPID_PUBLIC_KEY = 'BJoJIWa3BxxjTxe7fY57dEeWWDzH3629mzpaKOoFWboj2JT8F762J9Vq5jRPEGUzY_0o884I_ZCsRfyVwT4PzO8';
+  readonly VAPID_PUBLIC_KEY = 'BLO114RXRFYrH6Ha_MKSW-Jc4AZRdl4PNRGmYRWojyh9ESkTEEhXIM9X6OwOeWAZUL-QgCup0xgHy_9JyfSfuE8';
 
   isSubscribed = signal(false);
 
   constructor(
     private swPush: SwPush,
-    private http: HttpClient
+    private http: HttpClient,
+    private authService: AuthService
   ) {
     this.swPush.subscription.subscribe(sub => {
       this.isSubscribed.set(!!sub);
     });
+  }
+
+  getHeaders() {
+    const headers: HttpHeaders = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.authService.getTokenFromStorage()}`
+    })
+    return headers
   }
 
   async subscribeToNotifications() {
@@ -28,20 +38,33 @@ export class PushNotificationService {
     }
 
     try {
-      console.log('chamado');
+      console.log('PushNotificationService: Iniciando subscrição...');
 
+      const permission = await Notification.requestPermission();
+      console.log('PushNotificationService: Permissão de notificação:', permission);
+
+      if (permission !== 'granted') {
+        console.warn('PushNotificationService: Permissão negada pelo usuário');
+        return false;
+      }
+
+      console.log('PushNotificationService: Solicitando subscrição ao SwPush...');
       const sub = await this.swPush.requestSubscription({
         serverPublicKey: this.VAPID_PUBLIC_KEY
       });
 
-      console.log('subscription', sub);
-      await firstValueFrom(this.http.post(`${config.api}/users/push/subscribe`, sub));
+      console.log('PushNotificationService: Subscrição obtida:', sub);
+
+      console.log('PushNotificationService: Enviando subscrição para o servidor...');
+      await firstValueFrom(this.http.post(`${config.api}/users/push/subscribe`, sub, { headers: this.getHeaders() }));
+
+      console.log('PushNotificationService: Subscrição salva com sucesso');
       this.isSubscribed.set(true);
       this.notifyEnabled();
       return true;
 
     } catch (err) {
-      console.error('Could not subscribe to notifications', err);
+      console.error('PushNotificationService: Erro durante a subscrição', err);
       return false;
     }
   }
@@ -49,7 +72,7 @@ export class PushNotificationService {
   notifyEnabled() {
     if (Notification.permission !== 'granted') return;
 
-    new Notification('🔔 Voz Urbana', {
+    new Notification('Voz Urbana', {
       body: 'Agora você receberá atualizações sobre suas reclamações.',
       icon: '/icons/icon-192x192.png',
       badge: '/icons/badge-72x72.png'
@@ -61,7 +84,7 @@ export class PushNotificationService {
     try {
       const sub = await firstValueFrom(this.swPush.subscription);
       if (sub) {
-        await firstValueFrom(this.http.post(`${config.api}/users/push/unsubscribe`, { endpoint: sub.endpoint }));
+        await firstValueFrom(this.http.post(`${config.api}/users/push/unsubscribe`, { endpoint: sub.endpoint }, { headers: this.getHeaders() }));
         await sub.unsubscribe();
       }
       this.isSubscribed.set(false);

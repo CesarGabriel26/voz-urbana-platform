@@ -14,11 +14,11 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([
         httpErrorInterceptor
       ])
-    ), 
+    ),
     provideAnimationsAsync(),
     provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      registrationStrategy: 'registerWhenStable:30000'
+      enabled: true,
+      registrationStrategy: 'registerImmediately'
     })
   ]
 };
