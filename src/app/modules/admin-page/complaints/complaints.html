@@ -1,69 +1,154 @@
 <div class="admin-complaints">
     <div class="header">
-        <h1>Gerenciar Reclamações</h1>
-        <div class="search-box">
-            <m-form-input [formControl]="searchControl" [control]="searchControl"
-                placeholder="Buscar por título, descrição ou status..." icon="search">
-            </m-form-input>
+        <div class="title-section">
+            <h1>Gerenciar Reclamações</h1>
+            <span class="count-badge">{{ filteredComplaints().length }} de {{ complaints().length }} relatos</span>
+        </div>
+        
+        <div class="filters-container" [formGroup]="filterForm">
+            <div class="search-field">
+                <m-form-input formControlName="search" [control]="searchControl"
+                    label="Buscar título ou descrição..." icon="search">
+                </m-form-input>
+            </div>
+
+            <div class="advanced-filters">
+                <select formControlName="category" class="filter-select">
+                    <option value="">Todas Categorias</option>
+                    @for (cat of categories(); track cat) {
+                        <option [value]="cat">{{ cat }}</option>
+                    }
+                </select>
+
+                <select formControlName="status" class="filter-select">
+                    <option value="">Todos Status</option>
+                    <option value="0">Pendente</option>
+                    <option value="1">Aceita</option>
+                    <option value="2">Em Revisão</option>
+                    <option value="3">Resolvido</option>
+                    <option value="-1">Rejeitado</option>
+                </select>
+
+                <select formControlName="priority" class="filter-select">
+                    <option value="">Qualquer Prioridade</option>
+                    <option value="priority-high">Alta</option>
+                    <option value="priority-medium">Média</option>
+                    <option value="priority-low">Baixa</option>
+                </select>
+
+                <select formControlName="neighborhood" class="filter-select">
+                    <option value="">Todos Bairros</option>
+                    @for (n of neighborhoods(); track n) {
+                        <option [value]="n">{{ n }}</option>
+                    }
+                </select>
+
+                <input type="date" formControlName="date" class="filter-date">
+
+                <button class="btn-clear" (click)="clearFilters()" title="Limpar Filtros">
+                    <i class="material-symbols-outlined">filter_alt_off</i>
+                </button>
+            </div>
         </div>
     </div>
 
     <m-data-table 
-        [data]="complaints()" 
+        [data]="filteredComplaints()" 
         [columns]="columns" 
-        [filterFields]="filterFields" 
+        [filterFields]="[]" 
         layout="cards-horizontal"
-        [query]="searchControl.value" 
-        [pageSize]="10"
+        [remoteFilter]="true"
+        [pageSize]="20"
         [cardTemplate]="complaintCard"
     >
     </m-data-table>
 
     <ng-template #complaintCard let-item>
-        <div class="complaint-card">
-            <div class="card-header">
-                <div class="title-group">
-                    <h3>{{ item.title }}</h3>
-                    <span class="category">{{ item.category_name }}</span>
+        <div class="complaint-card" [class.has-image]="item.imageUrl">
+            @if (item.imageUrl) {
+                <div class="card-image">
+                    <img [src]="item.imageUrl" alt="Complaint image">
                 </div>
-                <div class="status-badge" [attr.data-status]="item.status">
-                    {{ getStatusLabel(item.status) }}
+            }
+
+            <div class="card-content">
+                <div class="card-header">
+                    <div class="title-group">
+                        <div class="top-row">
+                            <span class="priority-tag" [ngClass]="getPriorityInfo(item).class">
+                                <i class="material-symbols-outlined">priority_high</i>
+                                {{ getPriorityInfo(item).label }}
+                            </span>
+                            <span class="category-tag">
+                                <i class="material-symbols-outlined">tag</i>
+                                {{ item.category_name }}
+                            </span>
+                        </div>
+                        <h3>{{ item.title }}</h3>
+                    </div>
+                    <div class="status-badge" [ngClass]="getStatusClass(item.status)">
+                        {{ getStatusLabel(item.status) }}
+                    </div>
                 </div>
-            </div>
 
-            <div class="card-body">
-                <p class="description">{{ item.description }}</p>
-                <div class="meta">
-                    <span><i class="material-symbols-outlined">location_on</i> {{ item.address || 'Localização não informada' }}</span>
-                    <span><i class="material-symbols-outlined">calendar_today</i> {{ item.createdAt | date:'short' }}</span>
+                <div class="card-body">
+                    <p class="description">{{ item.description }}</p>
+                    
+                    <div class="meta-grid">
+                        <div class="meta-item">
+                            <i class="material-symbols-outlined">location_on</i>
+                            <span>{{ item.address || 'Localização não informada' }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="material-symbols-outlined">history</i>
+                            <span>{{ getTimeSince(item.createdAt) }}</span>
+                        </div>
+                        @if (item.votes > 0) {
+                            <div class="meta-item">
+                                <i class="material-symbols-outlined">thumb_up</i>
+                                <span>{{ item.votes }} apoios</span>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
 
-            <div class="card-actions">
-                @if (item.status === 0) {
-                    <button class="btn btn-accept" (click)="updateStatus(item.id, 1)">
-                        <i class="material-symbols-outlined">check_circle</i> Aceitar
-                    </button>
-                    <button class="btn btn-reject" (click)="updateStatus(item.id, -1)">
-                        <i class="material-symbols-outlined">cancel</i> Rejeitar
-                    </button>
-                }
+                <div class="card-actions">
+                    <div class="moderation-group">
+                        @if (item.status === 0) {
+                            <button class="btn btn-approve" (click)="updateStatus(item.id, 1)" title="Aprovar">
+                                <i class="material-symbols-outlined">check_circle</i>
+                                <span>Aprovar</span>
+                            </button>
+                            <button class="btn btn-reject" (click)="updateStatus(item.id, -1)" title="Rejeitar">
+                                <i class="material-symbols-outlined">cancel</i>
+                                <span>Rejeitar</span>
+                            </button>
+                        }
 
-                @if (item.status === 1) {
-                    <button class="btn btn-progress" (click)="updateStatus(item.id, 2)">
-                        <i class="material-symbols-outlined">engineering</i> Iniciar Atendimento
-                    </button>
-                }
+                        @if (item.status === 1) {
+                            <button class="btn btn-progress" (click)="updateStatus(item.id, 2)">
+                                <i class="material-symbols-outlined">engineering</i> Iniciar Atendimento
+                            </button>
+                        }
 
-                @if (item.status === 2) {
-                    <button class="btn btn-resolve" (click)="updateStatus(item.id, 3)">
-                        <i class="material-symbols-outlined">task_alt</i> Marcar como Resolvida
-                    </button>
-                }
-                
-                <button class="btn btn-view" title="Ver Detalhes">
-                    <i class="material-symbols-outlined">visibility</i>
-                </button>
+                        @if (item.status === 2) {
+                            <button class="btn btn-resolve" (click)="updateStatus(item.id, 3)">
+                                <i class="material-symbols-outlined">task_alt</i> Marcar como Resolvida
+                            </button>
+                        }
+                    </div>
+
+                    <div class="secondary-actions">
+                        @if (item.lat && item.lng) {
+                            <button class="btn btn-icon btn-map" (click)="openOnMap(item)" title="Abrir no Mapa">
+                                <i class="material-symbols-outlined">map</i>
+                            </button>
+                        }
+                        <button class="btn btn-icon btn-view" (click)="viewDetails(item.id)" title="Ver Detalhes">
+                            <i class="material-symbols-outlined">visibility</i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </ng-template>

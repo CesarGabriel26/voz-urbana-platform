@@ -41,7 +41,30 @@ export class AuthService {
     const url = `${config.api}/users/login`;
 
     return this.http.post<AuthResponse>(url, request).pipe(
+      map(res => {
+        this.saveToStorage(res);
+        return res;
+      }),
       catchError(this.handleHttpError<AuthResponse | null>(null, 'login'))
+    );
+  }
+
+  refreshToken(): Observable<AuthResponse | null> {
+    const url = `${config.api}/users/refresh`;
+    const data = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+    const refreshToken = data.refreshToken;
+
+    if (!refreshToken) return of(null);
+
+    return this.http.post<AuthResponse>(url, { refreshToken }).pipe(
+      map(res => {
+        this.saveToStorage(res);
+        return res;
+      }),
+      catchError(err => {
+        this.logout();
+        return of(null);
+      })
     );
   }
 
@@ -65,6 +88,11 @@ export class AuthService {
   getTokenFromStorage(): string | null {
     const data = localStorage.getItem(this.STORAGE_KEY);
     return data ? (JSON.parse(data) as AuthResponse).accessToken : null;
+  }
+
+  getRefreshTokenFromStorage(): string | null {
+    const data = localStorage.getItem(this.STORAGE_KEY);
+    return data ? (JSON.parse(data) as AuthResponse).refreshToken : null;
   }
 
   userLogged(): boolean {

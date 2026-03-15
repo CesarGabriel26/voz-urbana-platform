@@ -94,13 +94,22 @@
                                 <div class="dropdown-menu-content">
                                     @for(child of item.children; track $index) {
                                     @if (shouldShowItem(child)) {
-                                    <li class="dropdown-item" (click)="closeMenu(); $event.stopPropagation()">
+                                    <li class="dropdown-item" (click)="decodeCLick(child, $event); $event.stopPropagation()">
+                                        @if (child.link) {
                                         <a [routerLink]="child.link" routerLinkActive="active">
                                             @if(child.icon){
                                             <span class="material-symbols-outlined">{{ child.icon }}</span>
                                             }
                                             {{ child.label }}
                                         </a>
+                                        } @else {
+                                        <a class="clickable">
+                                            @if(child.icon){
+                                            <span class="material-symbols-outlined">{{ child.icon }}</span>
+                                            }
+                                            {{ child.label }}
+                                        </a>
+                                        }
                                     </li>
                                     }
                                     }

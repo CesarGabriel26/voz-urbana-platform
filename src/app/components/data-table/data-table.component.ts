@@ -26,6 +26,7 @@ type LayoutType = 'table' | 'cards' | 'cards-horizontal';
 export class DataTableComponent<T extends Record<string, any>> {
 
     data = input.required<T[]>();
+    showInput = input<boolean>(false);
     columns = input<TableColumn<T>[]>([]);
 
     filterFields = input<(keyof T)[]>([]);

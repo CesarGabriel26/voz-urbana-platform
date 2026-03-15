@@ -6,12 +6,14 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { routes } from './app.routes';
 import { httpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { provideServiceWorker } from '@angular/service-worker';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([
+        authInterceptor,
         httpErrorInterceptor
       ])
     ),
