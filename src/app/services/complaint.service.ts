@@ -5,6 +5,8 @@ import { Complaint } from '../types/Complaint';
 import { config } from '../config';
 import { AuthService } from './auth.service';
 import { HttpResponse } from '../types/HttpResponse';
+import { ConnectivityService } from './connectivity.service';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,9 @@ export class ComplaintService {
   private http = inject(HttpClient);
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private connectivityService: ConnectivityService,
+    private storageService: StorageService
   ) { }
 
   getHeaders() {
@@ -38,8 +42,20 @@ export class ComplaintService {
     return this.http.get<Complaint>(`${config.api}/complaints/complaint/${id}`, { headers })
   }
 
-  createComplaint(complaint: Partial<Complaint>): Observable<Complaint> {
-    const headers = this.getHeaders()
+  createComplaint(complaint: Partial<Complaint>, photoBlob?: Blob): Observable<Complaint | { queued: boolean }> {
+    if (!this.connectivityService.isOnline) {
+      // Offline: queue it
+      return new Observable(subscriber => {
+        this.storageService.queueComplaint(complaint, photoBlob)
+          .then(() => {
+            subscriber.next({ queued: true } as any);
+            subscriber.complete();
+          })
+          .catch(err => subscriber.error(err));
+      });
+    }
+
+    const headers = this.getHeaders();
     return this.http.post<Complaint>(`${config.api}/complaints`, complaint, { headers });
   }
 

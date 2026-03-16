@@ -1,6 +1,8 @@
 {
-  "name": "voz-urbana-web",
-  "short_name": "voz-urbana-web",
+  "name": "Voz Urbana",
+  "short_name": "Voz Urbana",
+  "theme_color": "#1976d2",
+  "background_color": "#0A61AA",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
@@ -52,6 +54,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"
+    },
+    {
+      "src": "icons/phone-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }

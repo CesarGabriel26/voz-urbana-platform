@@ -1,2 +1,9 @@
+@if (isOffline()) {
+  <div class="offline-banner">
+    <span class="material-symbols-outlined">wifi_off</span>
+    Você está offline. Algumas funcionalidades podem estar limitadas, mas suas reclamações serão salvas localmente.
+  </div>
+}
+
 <router-outlet />
 <m-toast-container/>

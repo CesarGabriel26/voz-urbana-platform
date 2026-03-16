@@ -14,6 +14,7 @@ import { ComplaintService } from '../../../services/complaint.service';
 import { CategoryService } from '../../../services/category.service';
 import { ImageCompressionService } from '../../../services/image-compression.service';
 import { CloudinaryService } from '../../../services/cloudinary.service';
+import { ConnectivityService } from '../../../services/connectivity.service';
 
 @Component({
   selector: 'app-complaint-create-page',
@@ -36,6 +37,7 @@ export class ComplaintCreatePage implements OnInit {
   private geoService = inject(GeolocationService);
   private compressionService = inject(ImageCompressionService);
   private cloudinaryService = inject(CloudinaryService);
+  private connectivity = inject(ConnectivityService);
 
   @ViewChild(MapComponent) mapComponent!: MapComponent;
 
@@ -82,6 +84,7 @@ export class ComplaintCreatePage implements OnInit {
   addressSearchQuery = signal<string>('');
   searchResults = signal<any[]>([]);
   isSearching = signal<boolean>(false);
+  compressedBlob = signal<Blob | null>(null);
 
   // Reactive access to form values for computed signals
   private step1Value = toSignal(this.form.get('step1')!.valueChanges, { initialValue: this.form.get('step1')!.value });
@@ -120,15 +123,20 @@ export class ComplaintCreatePage implements OnInit {
     try {
       console.log('Compressing image...');
       const compressedBlob = await this.compressionService.compressImage(this.selectedFile()!);
-      console.log('Original size:', this.selectedFile()!.size, 'Compressed size:', compressedBlob.size);
+      this.compressedBlob.set(compressedBlob);
       
-      console.log('Uploading to Cloudinary...');
-      const imageUrl = await this.cloudinaryService.uploadImage(compressedBlob);
-      this.step3.patchValue({ imageUrl });
+      if (this.connectivity.isOnline) {
+        console.log('Uploading to Cloudinary...');
+        const imageUrl = await this.cloudinaryService.uploadImage(compressedBlob);
+        this.step3.patchValue({ imageUrl });
+      } else {
+        console.log('Offline: Image will be uploaded during sync.');
+      }
+      
       this.isUploading.set(false);
       this.nextStep();
     } catch (error) {
-      console.error('Upload error:', error);
+      console.error('Upload/Compression error:', error);
       alert('Erro ao processar imagem. Tente novamente.');
       this.isUploading.set(false);
     }
@@ -224,39 +232,44 @@ export class ComplaintCreatePage implements OnInit {
     this.isSubmitting.set(true);
 
     try {
-      // Se houver arquivo selecionado, faz o upload primeiro
-      if (this.selectedFile()) {
+      let imageUrl = this.form.get('step3.imageUrl')?.value;
+      let photoBlobToQueue: Blob | undefined;
+
+      // Se houver arquivo selecionado e ainda não tivermos a URL (ou se estivermos offline)
+      if (this.selectedFile() && (!imageUrl || !this.connectivity.isOnline)) {
         this.isUploading.set(true);
-        console.log('Compressing image...');
-        const compressedBlob = await this.compressionService.compressImage(this.selectedFile()!);
-        console.log('Original size:', this.selectedFile()!.size, 'Compressed size:', compressedBlob.size);
+        const compressedBlob = this.compressedBlob() || await this.compressionService.compressImage(this.selectedFile()!);
+        this.compressedBlob.set(compressedBlob);
         
-        console.log('Uploading to Cloudinary...');
-        const imageUrl = await this.cloudinaryService.uploadImage(compressedBlob);
-        this.step3.patchValue({ imageUrl });
+        if (this.connectivity.isOnline) {
+          imageUrl = await this.cloudinaryService.uploadImage(compressedBlob);
+          this.step3.patchValue({ imageUrl });
+        } else {
+          photoBlobToQueue = compressedBlob;
+        }
         this.isUploading.set(false);
       }
 
-      // Montar complaint com valores atualizados (caso imageUrl tenha sido patched)
-      const values = this.form.value
+      // Montar complaint
+      const values = this.form.value;
       const complaint = {
         title: values.step1.title,
         description: values.step1.description,
         category: values.step1.category,
         priority: 0,
         visibility: values.step4.visibility,
-        imageUrl: values.step3.imageUrl,
+        imageUrl: imageUrl || '',
         status: 0,
         lat: values.step2.latitude,
         lng: values.step2.longitude,
         address: values.step2.address,
         createdBy: user?.id || '',
-      }
+      };
 
-      this.complaintService.createComplaint(complaint).subscribe({
-        next: (value) => {
+      this.complaintService.createComplaint(complaint, photoBlobToQueue).subscribe({
+        next: (value: any) => {
           if (value) {
-            this.router.navigate(['/mycomplaints'])
+            this.router.navigate(['/mycomplaints']);
           }
         },
         error: (err) => {

@@ -1,8 +1,9 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { User, AuthResponse, LoginRequest } from '../models/user.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { config } from '../config';
 import { catchError, map, Observable, of } from 'rxjs';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +20,21 @@ export class AuthService {
   token = this._token.asReadonly();
   isAuthenticated = computed(() => !!this._token());
 
+  private storageService = inject(StorageService);
+
   constructor(
     private http: HttpClient
-  ) { }
+  ) {
+    this.initAuth();
+  }
+
+  private async initAuth() {
+    const data = await this.storageService.getAppState(this.STORAGE_KEY);
+    if (data) {
+      this._user.set(data.user);
+      this._token.set(data.accessToken);
+    }
+  }
 
   getUser(): User | null {
     return this._user();
@@ -70,12 +83,14 @@ export class AuthService {
 
   logout(): void {
     this.clearStorage();
+    this.storageService.setAppState(this.STORAGE_KEY, null);
     this._user.set(null);
     this._token.set(null);
   }
 
   saveToStorage(auth: AuthResponse): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(auth));
+    this.storageService.setAppState(this.STORAGE_KEY, auth);
     this._user.set(auth.user);
     this._token.set(auth.accessToken);
   }
