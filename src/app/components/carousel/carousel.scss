@@ -97,8 +97,11 @@
     }
 
     @media (max-width: 768px) {
+        top: 1rem;
         width: 36px;
         height: 36px;
+        backdrop-filter: none;
+        background-color: transparent;
 
         &.prev {
             left: 0.5rem;
